@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Reservas Pátio das Letras</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a1f3a;
+    --gold: #d4af37;
+    --gold-light: #f5f1e8;
+    --cream: #faf8f4;
+    --warm: #f5f0e8;
+    --text: #1a1a1a;
+    --muted: #6b7280;
+    --border: #e5e0d8;
+    --red: #DC2626;
+    --green: #16A34A;
+    --green-light: #F0FDF4;
+    --blue: #2563EB;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
+
+  /* LOGIN PAGE */
+  .login-container { 
+    background-image: linear-gradient(135deg, rgba(26, 31, 58, 0.85) 0%, rgba(42, 47, 74, 0.85) 100%), url('condominio-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .login-box {
+    background: white;
+    border-radius: 20px;
+    padding: 3rem;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  }
+
+  .login-header { text-align: center; margin-bottom: 2rem; }
+  .login-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .login-title { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: var(--navy); margin-bottom: 0.5rem; }
+  .login-subtitle { font-size: 13px; color: var(--muted); }
+
+  .form-group { margin-bottom: 1.5rem; }
+  label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px; }
+  input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; background: var(--cream); }
+  input:focus { outline: none; border-color: var(--gold); background: white; box-shadow: 0 0 0 3px rgba(212,175,55,0.1); }
+
+  .btn-login { width: 100%; padding: 12px; background: var(--navy); color: white; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+  .btn-login:hover { background: var(--gold); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(212,175,55,0.3); }
+  .btn-login:disabled { opacity: 0.5; cursor: default; }
+
+  .login-error { color: var(--red); font-size: 12px; text-align: center; margin-bottom: 1rem; display: none; }
+
+  /* DASHBOARD */
+  .dashboard { display: none; }
+  .dashboard.active { display: block; }
+
+  header {
+    background: var(--navy);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-icon { width: 40px; height: 40px; background: var(--gold); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .logo-text { color: white; font-size: 16px; font-weight: 500; }
+
+  .header-actions { display: flex; align-items: center; gap: 1rem; }
+  .header-date { color: rgba(255,255,255,0.7); font-size: 13px; }
+  .btn-logout { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.2s; }
+  .btn-logout:hover { background: var(--red); border-color: var(--red); }
+
+  main { padding: 2rem; max-width: 1400px; margin: 0 auto; }
+
+  .dashboard-title { font-family: 'DM Serif Display', serif; font-size: 2rem; margin-bottom: 2rem; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+  .stat-card { background: white; border-radius: 12px; border: 1px solid var(--border); padding: 1.5rem; }
+  .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
+  .stat-value { font-family: 'DM Serif Display', serif; font-size: 2.2rem; color: var(--navy); margin-bottom: 0.5rem; }
+  .stat-change { font-size: 12px; color: var(--green); }
+  .stat-change.negative { color: var(--red); }
+
+  .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+
+  .card { background: white; border-radius: 12px; border: 1px solid var(--border); padding: 1.5rem; }
+  .card-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; margin-bottom: 1rem; }
+
+  .chart-container { height: 300px; display: flex; align-items: flex-end; gap: 8px; }
+  .bar { background: var(--gold); border-radius: 6px 6px 0 0; flex: 1; position: relative; min-height: 20px; }
+  .bar-label { position: absolute; bottom: -25px; width: 100%; text-align: center; font-size: 11px; color: var(--muted); }
+
+  .filters { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .filter-group { display: flex; gap: 6px; }
+  label.filter-label { font-size: 12px; color: var(--muted); display: flex; align-items: center; }
+  input.filter-input, select.filter-select { padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; }
+
+  .table-container { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: var(--warm); padding: 12px; text-align: left; font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+  td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  tr:hover { background: var(--cream); }
+
+  .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+  .badge-sala { background: var(--gold-light); color: var(--gold); }
+  .badge-campo { background: var(--blue); color: white; }
+  .badge-active { background: var(--green-light); color: var(--green); }
+  .badge-cancelled { background: #FEE2E2; color: var(--red); }
+
+  .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--navy); color: white; padding: 12px 20px; border-radius: 10px; font-size: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); transform: translateY(100px); opacity: 0; transition: all 0.3s; z-index: 999; }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { background: var(--green); }
+  .toast.error { background: var(--red); }
+
+  @media (max-width: 900px) { .content-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) { 
+    .stats-grid { grid-template-columns: 1fr; }
+    main { padding: 1rem; }
+    .login-box { padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div class="login-container" id="loginContainer">
+  <div class="login-box">
+    <div class="login-header">
+      <div class="login-icon">🔐</div>
+      <div class="login-title">Admin Portal</div>
+      <div class="login-subtitle">Pátio das Letras — Reservas</div>
+    </div>
+    
+    <div class="login-error" id="loginError"></div>
+    
+    <form onsubmit="fazerLogin(event)">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="username" placeholder="admin" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Palavra-passe</label>
+        <input type="password" id="password" placeholder="••••••" required>
+      </div>
+      
+      <button type="submit" class="btn-login">Entrar</button>
+    </form>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+  <header>
+    <div class="logo">
+      <div class="logo-icon">⚙️</div>
+      <div class="logo-text">Admin — Reservas Pátio</div>
+    </div>
+    <div class="header-actions">
+      <div class="header-date" id="headerDate"></div>
+      <button class="btn-logout" onclick="fazerLogout()">Sair</button>
+    </div>
+  </header>
+
+  <main>
+    <h1 class="dashboard-title">Dashboard Administrativo</h1>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total de Reservas</div>
+        <div class="stat-value" id="statTotal">0</div>
+        <div class="stat-change">Este mês</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Sala de Festas</div>
+        <div class="stat-value" id="statSala">0</div>
+        <div class="stat-change">Reservas activas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Campo de Futebol</div>
+        <div class="stat-value" id="statCampo">0</div>
+        <div class="stat-change">Reservas activas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Cancelamentos</div>
+        <div class="stat-value" id="statCancelados">0</div>
+        <div class="stat-change negative">Este mês</div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-title">Utilização por Espaço</div>
+        <div class="chart-container" id="chartEspacos"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Reservas por Mês</div>
+        <div class="chart-container" id="chartMeses"></div>
+      </div>
+    </div>
+
+    <!-- FILTERS & TABLE -->
+    <div class="card">
+      <div class="card-title">Todas as Reservas</div>
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label class="filter-label">Espaço:</label>
+          <select class="filter-select" id="filterEspaco" onchange="aplicarFiltros()">
+            <option value="">Todos</option>
+            <option value="sala">Sala de Festas</option>
+            <option value="campo">Campo de Futebol</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">De:</label>
+          <input type="date" class="filter-input" id="filterDataInicio" onchange="aplicarFiltros()">
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Até:</label>
+          <input type="date" class="filter-input" id="filterDataFim" onchange="aplicarFiltros()">
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Hora</th>
+              <th>Espaço</th>
+              <th>Prédio</th>
+              <th>Andar</th>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Telefone</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="tableReservas"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CANCELAMENTOS -->
+    <div class="card" style="margin-top: 1.5rem;">
+      <div class="card-title">Histórico de Cancelamentos</div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Data Original</th>
+              <th>Espaço</th>
+              <th>Prédio</th>
+              <th>Nome</th>
+              <th>Data Cancelamento</th>
+              <th>Motivo</th>
+            </tr>
+          </thead>
+          <tbody id="tableCancelamentos">
+            <tr><td colspan="6" style="text-align:center;color:var(--muted);">Sem cancelamentos neste período</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── CONFIG ──────────────────────────────────────────────────────────────────
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxj7_8EpZbSXEN3pfcHtZJ2HBfWcdm9Pl8JNP0698Mo5EsH9Dj0MQJkeO8IhbZcf-_u/exec';
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'patio2024'; // Mudar para algo mais seguro
+
+let reservas = [];
+let isLoggedIn = false;
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+document.getElementById('headerDate').textContent = new Date().toLocaleDateString('pt-PT', {weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+// Verificar se já está logado
+if (localStorage.getItem('adminToken')) {
+  isLoggedIn = true;
+  document.getElementById('loginContainer').style.display = 'none';
+  document.getElementById('dashboard').classList.add('active');
+  loadDashboard();
+}
+
+// ─── AUTENTICAÇÃO ────────────────────────────────────────────────────────────
+function fazerLogin(event) {
+  event.preventDefault();
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  const errorDiv = document.getElementById('loginError');
+
+  if (username === ADMIN_USER && password === ADMIN_PASS) {
+    localStorage.setItem('adminToken', 'token_' + Date.now());
+    isLoggedIn = true;
+    document.getElementById('loginContainer').style.display = 'none';
+    document.getElementById('dashboard').classList.add('active');
+    loadDashboard();
+  } else {
+    errorDiv.textContent = 'Username ou palavra-passe incorretos';
+    errorDiv.style.display = 'block';
+    setTimeout(() => { errorDiv.style.display = 'none'; }, 3000);
+  }
+}
+
+function fazerLogout() {
+  localStorage.removeItem('adminToken');
+  isLoggedIn = false;
+  document.getElementById('dashboard').classList.remove('active');
+  document.getElementById('loginContainer').style.display = 'flex';
+  document.getElementById('username').value = '';
+  document.getElementById('password').value = '';
+}
+
+// ─── LOAD DASHBOARD ──────────────────────────────────────────────────────────
+async function loadDashboard() {
+  try {
+    const res = await fetch(SCRIPT_URL + '?action=list');
+    const data = await res.json();
+    if (data.success) {
+      reservas = (data.reservas || []).map(r => ({
+        ...r,
+        id: String(r.id || ''),
+        espaco: String(r.espaco || ''),
+        data: String(r.data || ''),
+        inicio: String(r.inicio || ''),
+        fim: String(r.fim || ''),
+        predio: String(r.predio || ''),
+        andar: String(r.andar || ''),
+        nome: String(r.nome || ''),
+        email: String(r.email || ''),
+        telefone: String(r.telefone || ''),
+      }));
+      atualizarDashboard();
+    }
+  } catch(e) {
+    console.error('Erro ao carregar dados:', e);
+  }
+}
+
+function atualizarDashboard() {
+  const hoje = new Date();
+  const mesAtual = hoje.getFullYear() + '-' + String(hoje.getMonth() + 1).padStart(2, '0');
+  
+  // Stats
+  const reservasMes = reservas.filter(r => r.data.startsWith(mesAtual));
+  const sala = reservas.filter(r => r.espaco === 'sala' && r.data >= new Date().toISOString().split('T')[0]);
+  const campo = reservas.filter(r => r.espaco === 'campo' && r.data >= new Date().toISOString().split('T')[0]);
+  
+  document.getElementById('statTotal').textContent = reservasMes.length;
+  document.getElementById('statSala').textContent = sala.length;
+  document.getElementById('statCampo').textContent = campo.length;
+  document.getElementById('statCancelados').textContent = '0'; // Será preenchido com histórico
+  
+  // Charts
+  desenharCharts();
+  
+  // Table
+  renderizarTabela();
+}
+
+function desenharCharts() {
+  // Chart: Espaços
+  const salaCount = reservas.filter(r => r.espaco === 'sala').length;
+  const campoCount = reservas.filter(r => r.espaco === 'campo').length;
+  const maxCount = Math.max(salaCount, campoCount, 1);
+  
+  const chartEspacos = document.getElementById('chartEspacos');
+  chartEspacos.innerHTML = `
+    <div class="bar" style="height:${(salaCount/maxCount)*100}%;">
+      <div class="bar-label">Sala<br>${salaCount}</div>
+    </div>
+    <div class="bar" style="height:${(campoCount/maxCount)*100}%;">
+      <div class="bar-label">Campo<br>${campoCount}</div>
+    </div>
+  `;
+
+  // Chart: Meses
+  const meses = {};
+  reservas.forEach(r => {
+    const mes = r.data.substring(0, 7);
+    meses[mes] = (meses[mes] || 0) + 1;
+  });
+  
+  const meseslabels = Object.keys(meses).sort();
+  const maxMes = Math.max(...Object.values(meses), 1);
+  
+  const chartMeses = document.getElementById('chartMeses');
+  chartMeses.innerHTML = meseslabels.map(m => {
+    const [year, month] = m.split('-');
+    const mesNome = new Date(year, month - 1).toLocaleDateString('pt-PT', {month:'short'});
+    return `
+      <div class="bar" style="height:${(meses[m]/maxMes)*100}%;">
+        <div class="bar-label">${mesNome}<br>${meses[m]}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderizarTabela() {
+  const tbody = document.getElementById('tableReservas');
+  const hoje = new Date().toISOString().split('T')[0];
+  
+  const sorted = [...reservas].sort((a, b) => (b.data + b.inicio).localeCompare(a.data + a.inicio));
+  
+  tbody.innerHTML = sorted.map(r => {
+    const status = r.data >= hoje ? 'badge-active' : 'badge-cancelled';
+    const statusText = r.data >= hoje ? 'Activo' : 'Passado';
+    const espaco = r.espaco === 'sala' ? '🎉 Sala' : '⚽ Campo';
+    const dataBR = new Date(r.data + 'T12:00:00').toLocaleDateString('pt-PT');
+    
+    return `
+      <tr>
+        <td>${dataBR}</td>
+        <td>${r.inicio}–${r.fim}</td>
+        <td><span class="badge badge-${r.espaco}">${espaco}</span></td>
+        <td>${r.predio}</td>
+        <td>${r.andar}</td>
+        <td>${r.nome}</td>
+        <td>${r.email}</td>
+        <td>${r.telefone}</td>
+        <td><span class="badge ${status}">${statusText}</span></td>
+      </tr>
+    `;
+  }).join('');
+  
+  if (sorted.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--muted);">Sem reservas</td></tr>';
+  }
+}
+
+function aplicarFiltros() {
+  // Filtrar pela data e espaço
+  const espaco = document.getElementById('filterEspaco').value;
+  const dataInicio = document.getElementById('filterDataInicio').value;
+  const dataFim = document.getElementById('filterDataFim').value;
+  
+  const tbody = document.getElementById('tableReservas');
+  const hoje = new Date().toISOString().split('T')[0];
+  
+  let filtered = [...reservas];
+  
+  if (espaco) filtered = filtered.filter(r => r.espaco === espaco);
+  if (dataInicio) filtered = filtered.filter(r => r.data >= dataInicio);
+  if (dataFim) filtered = filtered.filter(r => r.data <= dataFim);
+  
+  const sorted = filtered.sort((a, b) => (b.data + b.inicio).localeCompare(a.data + a.inicio));
+  
+  tbody.innerHTML = sorted.map(r => {
+    const status = r.data >= hoje ? 'badge-active' : 'badge-cancelled';
+    const statusText = r.data >= hoje ? 'Activo' : 'Passado';
+    const espaco = r.espaco === 'sala' ? '🎉 Sala' : '⚽ Campo';
+    const dataBR = new Date(r.data + 'T12:00:00').toLocaleDateString('pt-PT');
+    
+    return `
+      <tr>
+        <td>${dataBR}</td>
+        <td>${r.inicio}–${r.fim}</td>
+        <td><span class="badge badge-${r.espaco}">${espaco}</span></td>
+        <td>${r.predio}</td>
+        <td>${r.andar}</td>
+        <td>${r.nome}</td>
+        <td>${r.email}</td>
+        <td>${r.telefone}</td>
+        <td><span class="badge ${status}">${statusText}</span></td>
+      </tr>
+    `;
+  }).join('');
+  
+  if (sorted.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--muted);">Sem reservas</td></tr>';
+  }
+}
+
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast '+type+' show';
+  setTimeout(() => t.className='toast', 3500);
+}
+</script>
+</body>
+</html>
