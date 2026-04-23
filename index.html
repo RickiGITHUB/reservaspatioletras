@@ -30,11 +30,18 @@
     background: var(--navy); padding: 0 2rem;
     display: flex; align-items: center; justify-content: space-between;
     height: 64px; position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
-  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo { display: flex; align-items: center; gap: 12px; cursor: pointer; }
   .logo-icon { width: 36px; height: 36px; background: var(--gold); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
   .logo-text { color: white; font-size: 15px; font-weight: 500; line-height: 1.2; }
   .logo-sub { color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 300; }
+
+  .nav-menu { display: flex; gap: 0; align-items: center; }
+  .nav-item { color: rgba(255,255,255,0.7); font-size: 13px; padding: 8px 16px; cursor: pointer; transition: all 0.2s; border-bottom: 3px solid transparent; }
+  .nav-item:hover { color: white; background: rgba(212,175,55,0.1); }
+  .nav-item.active { color: var(--gold); border-bottom-color: var(--gold); }
+
   .header-date { color: rgba(255,255,255,0.6); font-size: 13px; }
 
   .page { display: none; }
@@ -51,8 +58,11 @@
     position: relative; 
     overflow: hidden; 
     min-height: calc(100vh - 64px); 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
-  .hero::before { content: ''; position: absolute; top: -60px; right: -60px; width: 300px; height: 300px; background: var(--gold); opacity: 0.08; border-radius: 50%; }
   .hero h1 { font-family: 'DM Serif Display', serif; color: white; font-size: 2.8rem; font-weight: 400; margin-bottom: 0.5rem; position: relative; }
   .hero p { color: rgba(255,255,255,0.65); font-size: 16px; margin-bottom: 3rem; position: relative; }
 
@@ -79,11 +89,11 @@
   .cal-wd { text-align: center; padding: 10px 0; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
   .cal-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--border); }
   .cal-day { background: white; min-height: 80px; padding: 8px; cursor: pointer; transition: background 0.15s; position: relative; }
-  .cal-day:hover:not(.other-month):not(.past) { background: var(--teal-light); }
+  .cal-day:hover:not(.other-month):not(.past) { background: var(--gold-light); }
   .cal-day.other-month { background: #fafafa; cursor: default; }
   .cal-day.past { opacity: 0.45; cursor: default; }
   .cal-day.today .day-num { background: var(--navy); color: white; border-radius: 50%; }
-  .cal-day.selected { background: var(--teal-light); outline: 2px solid var(--teal); outline-offset: -2px; }
+  .cal-day.selected { background: var(--gold-light); outline: 2px solid var(--gold); outline-offset: -2px; }
   .day-num { font-size: 13px; font-weight: 500; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
   .day-num.other { color: #ccc; }
   .day-events { margin-top: 2px; display: flex; flex-direction: column; gap: 2px; }
@@ -97,6 +107,39 @@
   .nav-btn { width: 36px; height: 36px; border: 1px solid var(--border); background: white; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
   .nav-btn:hover { background: var(--navy); color: white; border-color: var(--navy); }
 
+  /* PAGE 3: MINHAS RESERVAS */
+  .minhas-reservas-page { padding: 2rem; max-width: 800px; margin: 0 auto; }
+  .search-box { background: white; border-radius: 16px; border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
+  .search-title { font-family: 'DM Serif Display', serif; font-size: 1.4rem; margin-bottom: 1.5rem; }
+  .search-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .search-field { }
+  .search-field label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px; }
+  .search-field select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; background: var(--cream); }
+  .btn-search { width: 100%; padding: 10px; border: none; background: var(--navy); color: white; border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; transition: all 0.2s; margin-top: 1.5rem; }
+  .btn-search:hover { background: var(--gold); }
+
+  .reservas-list { background: white; border-radius: 16px; border: 1px solid var(--border); padding: 1.5rem; }
+  .reserva-card { padding: 1rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .reserva-card:last-child { border-bottom: none; }
+  .reserva-info { flex: 1; }
+  .reserva-esp { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gold); }
+  .reserva-morada { font-size: 14px; font-weight: 500; margin: 4px 0; }
+  .reserva-data { font-size: 12px; color: var(--muted); }
+  .reserva-actions { display: flex; gap: 8px; }
+  .btn-cancel-res { background: var(--red); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; transition: all 0.2s; }
+  .btn-cancel-res:hover { opacity: 0.9; }
+
+  .empty-state { text-align: center; padding: 2rem; color: var(--muted); }
+  .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+  /* PAGE 4: REGULAMENTO, ETC */
+  .content-page { padding: 2rem; max-width: 900px; margin: 0 auto; }
+  .content-title { font-family: 'DM Serif Display', serif; font-size: 2rem; margin-bottom: 1.5rem; }
+  .content-text { line-height: 1.8; color: var(--text); }
+  .content-text h3 { font-family: 'DM Serif Display', serif; font-size: 1.3rem; margin-top: 2rem; margin-bottom: 1rem; }
+  .content-text ul { margin-left: 2rem; margin-bottom: 1rem; }
+  .content-text li { margin-bottom: 0.5rem; }
+
   /* PAGE 3: FORM MODAL */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
   .modal-overlay.open { opacity: 1; pointer-events: all; }
@@ -108,12 +151,11 @@
   .form-group { margin-bottom: 1rem; }
   label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
   input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; background: var(--cream); color: var(--text); transition: border-color 0.15s; }
-  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--teal); background: white; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold); background: white; }
   textarea { resize: vertical; min-height: 60px; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
   .btn-submit { width: 100%; padding: 12px; border: none; background: var(--navy); color: white; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; margin-top: 1rem; }
-  .btn-submit:hover { background: var(--teal); transform: translateY(-1px); }
+  .btn-submit:hover { background: var(--gold); transform: translateY(-1px); }
   .btn-submit:disabled { opacity: 0.5; cursor: default; transform: none; }
   .btn-close { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 24px; position: absolute; top: 1rem; right: 1rem; }
 
@@ -134,18 +176,31 @@
   .toast.error { background: var(--red); }
 
   @media (max-width: 900px) { .space-buttons { grid-template-columns: 1fr; } }
-  @media (max-width: 600px) { .hero h1 { font-size: 2rem; } .space-buttons { gap: 1rem; } .space-btn { padding: 2rem 1.5rem; } }
+  @media (max-width: 600px) { 
+    .hero h1 { font-size: 2rem; } 
+    .space-buttons { gap: 1rem; } 
+    .space-btn { padding: 2rem 1.5rem; } 
+    .nav-item { padding: 6px 10px; font-size: 12px; }
+    .search-row { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">
+  <div class="logo" onclick="goToPage(1)">
     <div class="logo-icon">🏠</div>
     <div>
-      <div class="logo-text">Reservas ACPL</div>
-      <div class="logo-sub">Espaços Comuns · Tempo real</div>
+      <div class="logo-text">Reservas Pátio</div>
+      <div class="logo-sub">Espaços Comuns</div>
     </div>
+  </div>
+  <div class="nav-menu">
+    <div class="nav-item active" id="nav1" onclick="goToPage(1)">Home</div>
+    <div class="nav-item" id="nav3" onclick="goToPage(3)">Minhas Reservas</div>
+    <div class="nav-item" id="nav4" onclick="goToPage(4)">Regulamento</div>
+    <div class="nav-item" id="nav5" onclick="goToPage(5)">FAQs</div>
+    <div class="nav-item" id="nav6" onclick="goToPage(6)">Contactos</div>
   </div>
   <div class="header-date" id="headerDate"></div>
 </header>
@@ -201,6 +256,155 @@
   </div>
 </div>
 
+<!-- PAGE 3: MINHAS RESERVAS -->
+<div class="page" id="page3">
+  <div class="minhas-reservas-page">
+    <div class="search-box">
+      <div class="search-title">Minhas Reservas</div>
+      <div class="search-row">
+        <div class="search-field">
+          <label>Prédio</label>
+          <select id="sPredio">
+            <option value="">— Seleccionar —</option>
+            <option value="florbela">Florbela Espanca</option>
+            <option value="guerra">Guerra Junqueiro</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label>Andar</label>
+          <select id="sAndar">
+            <option value="">— Seleccionar —</option>
+            <option value="rc-esq">R/C ESQ</option>
+            <option value="rc-drt">R/C DRT</option>
+            <option value="1-esq">1º ESQ</option>
+            <option value="1-drt">1º DRT</option>
+            <option value="2-esq">2º ESQ</option>
+            <option value="2-drt">2º DRT</option>
+            <option value="3-esq">3º ESQ</option>
+            <option value="3-drt">3º DRT</option>
+            <option value="4-esq">4º ESQ</option>
+            <option value="4-drt">4º DRT</option>
+            <option value="5-esq">5º ESQ</option>
+            <option value="5-drt">5º DRT</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <button class="btn-search" onclick="buscarMinhasReservas()">Buscar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="reservas-list" id="minhasReservasList">
+      <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <p>Selecciona Prédio e Andar para ver as tuas reservas</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 4: REGULAMENTO -->
+<div class="page" id="page4">
+  <div class="content-page">
+    <div class="content-title">Regulamento de Reservas</div>
+    <div class="content-text">
+      <h3>Sala de Festas</h3>
+      <ul>
+        <li><strong>Antecedência mínima:</strong> 48 horas</li>
+        <li><strong>Antecedência máxima:</strong> 60 dias</li>
+        <li><strong>Capacidade:</strong> Máximo 40 pessoas</li>
+        <li><strong>Duração máxima:</strong> 5 horas</li>
+        <li><strong>Horários disponíveis:</strong>
+          <ul>
+            <li>Manhã: 09:00 – 14:00</li>
+            <li>Tarde: 15:00 – 20:00</li>
+          </ul>
+        </li>
+        <li><strong>Responsabilidades:</strong> Deixar o espaço limpo e arrumado após utilização</li>
+        <li><strong>Cancelamento:</strong> Mínimo 48h de aviso prévio</li>
+      </ul>
+
+      <h3>Campo de Futebol</h3>
+      <ul>
+        <li><strong>Antecedência mínima:</strong> 24 horas</li>
+        <li><strong>Antecedência máxima:</strong> 60 dias</li>
+        <li><strong>Duração máxima:</strong> 1 hora por período</li>
+        <li><strong>Períodos máximos por dia:</strong> 2</li>
+        <li><strong>Horários:</strong>
+          <ul>
+            <li><strong>Maio a Setembro:</strong> 08:00 – 21:00 (seg-sex); 09:00 – 21:00 (sáb/dom/feriados)</li>
+            <li><strong>Outubro a Abril:</strong> 08:00 – 20:00 (seg-sex); 09:00 – 20:00 (sáb/dom/feriados)</li>
+          </ul>
+        </li>
+        <li><strong>Cancelamento:</strong> Mínimo 24h de aviso prévio</li>
+      </ul>
+
+      <h3>Normas Gerais</h3>
+      <ul>
+        <li>Respeitar o horário de funcionamento</li>
+        <li>Manter o espaço limpo e organizado</li>
+        <li>Não fazer barulho excessivo</li>
+        <li>Devolver chaves (se aplicável) no horário combinado</li>
+        <li>Comunicar qualquer dano ou problema imediatamente</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 5: FAQs -->
+<div class="page" id="page5">
+  <div class="content-page">
+    <div class="content-title">Perguntas Frequentes</div>
+    <div class="content-text">
+      <h3>Como faço uma reserva?</h3>
+      <p>Clica em "Home", escolhe o espaço (Sala ou Campo), selecciona o dia no calendário e preenche o formulário com os teus dados.</p>
+
+      <h3>Como cancelo uma reserva?</h3>
+      <p>Vai a "Minhas Reservas", selecciona Prédio e Andar, encontra a reserva e clica em "Cancelar". Introduz o código que recebeste no email.</p>
+
+      <h3>Posso alterar a data da minha reserva?</h3>
+      <p>Cancela a reserva actual (com o PIN) e faz uma nova reserva na data pretendida.</p>
+
+      <h3>Quanto tempo antes preciso de cancelar?</h3>
+      <p><strong>Sala de Festas:</strong> 48h de antecedência | <strong>Campo de Futebol:</strong> 24h de antecedência</p>
+
+      <h3>Posso fazer duas reservas no mesmo dia?</h3>
+      <p>Sim, mas apenas para o Campo de Futebol (máximo 2 períodos de 1 hora cada). Para a Sala de Festas, apenas um período por dia.</p>
+
+      <h3>Preciso de chave para aceder ao espaço?</h3>
+      <p>Contacta os Contactos da Associação para detalhes sobre entrega de chaves.</p>
+
+      <h3>E se ultrapassar o horário?</h3>
+      <p>Deves respeitar o horário reservado. Contacta a Associação se precisares de extensão.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 6: CONTACTOS -->
+<div class="page" id="page6">
+  <div class="content-page">
+    <div class="content-title">Contactos</div>
+    <div class="content-text">
+      <h3>Associação de Proprietários Pátio das Letras</h3>
+      
+      <h3>Telefone</h3>
+      <p><strong>+351 XXX XXX XXX</strong> (atualizar com número real)</p>
+
+      <h3>Email</h3>
+      <p><strong>reservas@patiodasletras.pt</strong> (atualizar com email real)</p>
+
+      <h3>Horário de Atendimento</h3>
+      <p>Segunda a Sexta: 09:00 – 18:00<br>Sábado: 10:00 – 13:00<br>Domingo: Fechado</p>
+
+      <h3>Morada</h3>
+      <p>Pátio das Letras<br>Rua XXX XXX<br>Código Postal XXX XXX (atualizar)</p>
+
+      <h3>Dúvidas sobre Reservas?</h3>
+      <p>Para dúvidas relacionadas com o sistema de reservas, entra em contacto directamente com a Associação através dos contactos acima.</p>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL: RESERVATION FORM -->
 <div class="modal-overlay" id="formModal">
   <div class="modal">
@@ -220,15 +424,37 @@
       <div id="fFim" style="padding:10px 12px;background:var(--cream);border-radius:8px;font-size:14px;color:var(--text);border:1px solid var(--border);">—</div>
     </div>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label>Fracção</label>
-        <input type="text" id="fFraccao" placeholder="Ex: 2A">
-      </div>
-      <div class="form-group">
-        <label>Nome</label>
-        <input type="text" id="fNome" placeholder="Ex: João Silva">
-      </div>
+    <div class="form-group">
+      <label>Prédio</label>
+      <select id="fPredio">
+        <option value="">— Seleccionar —</option>
+        <option value="florbela">Florbela Espanca</option>
+        <option value="guerra">Guerra Junqueiro</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Andar</label>
+      <select id="fAndar">
+        <option value="">— Seleccionar —</option>
+        <option value="rc-esq">R/C ESQ</option>
+        <option value="rc-drt">R/C DRT</option>
+        <option value="1-esq">1º ESQ</option>
+        <option value="1-drt">1º DRT</option>
+        <option value="2-esq">2º ESQ</option>
+        <option value="2-drt">2º DRT</option>
+        <option value="3-esq">3º ESQ</option>
+        <option value="3-drt">3º DRT</option>
+        <option value="4-esq">4º ESQ</option>
+        <option value="4-drt">4º DRT</option>
+        <option value="5-esq">5º ESQ</option>
+        <option value="5-drt">5º DRT</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Nome</label>
+      <input type="text" id="fNome" placeholder="Ex: João Silva">
     </div>
 
     <div class="form-group">
@@ -261,7 +487,20 @@
       <button class="pin-copy-btn" onclick="copiarPin()">Copiar Código</button>
     </div>
     <p style="font-size:12px;color:var(--muted);margin-bottom:1rem;">Este código será também enviado para o teu email.</p>
-    <button class="pin-close" onclick="fecharPinModal()">Voltar para Calendário</button>
+    <button class="pin-close" onclick="fecharPinModal()">Voltar para Home</button>
+  </div>
+</div>
+
+<!-- MODAL: CANCELAMENTO -->
+<div class="modal-overlay" id="cancelModalOverlay">
+  <div class="modal">
+    <button class="btn-close" onclick="closeCancelModal()">×</button>
+    <h3>Cancelar Reserva</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:1.5rem;">Introduz o código de cancelamento que recebeste no email:</p>
+    <div class="form-group">
+      <input type="text" id="cancelPin" placeholder="Ex: 7392" maxlength="4" style="font-size:18px;text-align:center;letter-spacing:4px;">
+    </div>
+    <button class="btn-submit" onclick="confirmarCancelamento()" style="background:var(--red);">Confirmar Cancelamento</button>
   </div>
 </div>
 
@@ -275,6 +514,7 @@ let currentDate = new Date();
 let selectedEspaco = null;
 let selectedDay = null;
 let currentPin = null;
+let cancelingId = null;
 const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
@@ -285,7 +525,9 @@ setInterval(() => { loadReservas(); }, 60000);
 // ─── PAGE NAVIGATION ──────────────────────────────────────────────────────────
 function goToPage(page, espaco = null) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('page' + page).classList.add('active');
+  document.getElementById('nav' + page).classList.add('active');
   
   if (page === 2 && espaco) {
     selectedEspaco = espaco;
@@ -299,6 +541,12 @@ function goToPage(page, espaco = null) {
 function closeFormModal() {
   document.getElementById('formModal').classList.remove('open');
   selectedDay = null;
+}
+
+function closeCancelModal() {
+  document.getElementById('cancelModalOverlay').classList.remove('open');
+  cancelingId = null;
+  document.getElementById('cancelPin').value = '';
 }
 
 // ─── HORÁRIOS E VALIDAÇÕES ────────────────────────────────────────────────────
@@ -394,7 +642,8 @@ async function loadReservas() {
         data: String(r.data || ''),
         inicio: String(r.inicio || ''),
         fim: String(r.fim || ''),
-        fraccao: String(r.fraccao || ''),
+        predio: String(r.predio || ''),
+        andar: String(r.andar || ''),
         nome: String(r.nome || ''),
         telefone: String(r.telefone || ''),
         email: String(r.email || ''),
@@ -413,6 +662,14 @@ async function apiCreate(payload) {
   const res = await fetch(SCRIPT_URL, {
     method: 'POST',
     body: JSON.stringify({ action: 'create', ...payload })
+  });
+  return await res.json();
+}
+
+async function apiDelete(id, pin) {
+  const res = await fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify({ action: 'delete', id, pin })
   });
   return await res.json();
 }
@@ -447,7 +704,7 @@ function renderCalendar() {
     const dayRes = reservas.filter(r => r.espaco === selectedEspaco && r.data === dateStr);
     
     let cls = 'cal-day' + (isOther?' other-month':'') + (isPast?' past':'') + (isToday?' today':'') + (isSel?' selected':'');
-    let evHtml = dayRes.map(r => `<div class="ev-dot ev-${r.espaco}">${r.fraccao}</div>`).join('');
+    let evHtml = dayRes.map(r => `<div class="ev-dot ev-${r.espaco}">${r.predio.charAt(0)}</div>`).join('');
     
     html += `<div class="${cls}" onclick="${!isOther&&!isPast?`abrirFormModal('${dateStr}')`:''}"><div class="day-num ${isOther?'other':''}">${dayNum}</div><div class="day-events">${evHtml}</div></div>`;
   }
@@ -461,8 +718,7 @@ function abrirFormModal(dateStr) {
   updateTimeOptions();
   document.getElementById('formModal').classList.add('open');
   
-  // Limpar campos
-  ['fFraccao','fNome','fTelefone','fEmail','fDescricao','fInicio'].forEach(id => {
+  ['fPredio','fAndar','fNome','fTelefone','fEmail','fDescricao','fInicio'].forEach(id => {
     if (document.getElementById(id)) document.getElementById(id).value = '';
   });
 }
@@ -472,32 +728,30 @@ function gerarPin() { return String(Math.floor(1000 + Math.random() * 9000)); }
 async function submeterReserva() {
   const inicio = document.getElementById('fInicio').value;
   const fim = document.getElementById('fFim').textContent;
-  const fraccao = document.getElementById('fFraccao').value.trim().toUpperCase();
+  const predio = document.getElementById('fPredio').value;
+  const andar = document.getElementById('fAndar').value;
   const nome = document.getElementById('fNome').value.trim();
   const tel = document.getElementById('fTelefone').value.trim();
   const email = document.getElementById('fEmail').value.trim();
   const desc = document.getElementById('fDescricao').value.trim();
 
-  if (!inicio||!fraccao||!nome||!tel||!email) { showToast('Preenche todos os campos obrigatórios.','error'); return; }
+  if (!inicio||!predio||!andar||!nome||!tel||!email) { showToast('Preenche todos os campos obrigatórios.','error'); return; }
   if (!/^[\w\.-]+@[\w\.-]+\.\w+$/.test(email)) { showToast('Email inválido.','error'); return; }
 
   const reservaDate = new Date(selectedDay+'T'+inicio);
   if (reservaDate - new Date() < 48*3600*1000) { showToast('Reserva com pelo menos 48h de antecedência.','error'); return; }
 
-  // Validar duração
   let durMinutos = (new Date('2000-01-01 ' + fim) - new Date('2000-01-01 ' + inicio)) / 60000;
   if (selectedEspaco === 'sala' && durMinutos > 300) { showToast('Sala: máximo 5 horas.','error'); return; }
   if (selectedEspaco === 'campo' && durMinutos > 60) { showToast('Campo: máximo 1 hora por período.','error'); return; }
 
-  // Validar max 2 períodos/dia para campo
   if (selectedEspaco === 'campo') {
     const countDia = reservas.filter(r => r.espaco==='campo' && r.data===selectedDay).length;
     if (countDia >= 2) { showToast('Campo: máximo 2 períodos por dia.','error'); return; }
   }
 
-  // Validar conflitos
   const conflito = reservas.find(r => r.espaco===selectedEspaco && r.data===selectedDay && !(fim<=r.inicio || inicio>=r.fim));
-  if (conflito) { showToast(`Conflito com ${conflito.fraccao}.`,'error'); return; }
+  if (conflito) { showToast(`Conflito com ${conflito.predio} ${conflito.andar}.`,'error'); return; }
 
   const pin = gerarPin();
   const btn = document.getElementById('btnSubmit');
@@ -505,7 +759,7 @@ async function submeterReserva() {
   btn.textContent = 'A guardar…';
 
   try {
-    const result = await apiCreate({ espaco: selectedEspaco, data: selectedDay, inicio, fim, fraccao, nome, telefone: tel, email, descricao: desc, pin });
+    const result = await apiCreate({ espaco: selectedEspaco, data: selectedDay, inicio, fim, predio, andar, nome, telefone: tel, email, descricao: desc, pin });
     if (result.success) {
       currentPin = pin;
       document.getElementById('pinValue').textContent = pin;
@@ -532,6 +786,73 @@ function copiarPin() {
 function fecharPinModal() {
   document.getElementById('pinModalOverlay').classList.remove('open');
   currentPin = null;
+  goToPage(1);
+}
+
+// ─── MINHAS RESERVAS ──────────────────────────────────────────────────────────
+function buscarMinhasReservas() {
+  const predio = document.getElementById('sPredio').value;
+  const andar = document.getElementById('sAndar').value;
+
+  if (!predio || !andar) {
+    showToast('Selecciona Prédio e Andar.','error');
+    return;
+  }
+
+  const minhasReservas = reservas.filter(r => r.predio === predio && r.andar === andar);
+  const today = new Date().toISOString().split('T')[0];
+  const futuras = minhasReservas.filter(r => r.data >= today).sort((a,b) => (a.data+a.inicio).localeCompare(b.data+b.inicio));
+
+  const list = document.getElementById('minhasReservasList');
+  if (!futuras.length) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>Nenhuma reserva neste momento</p></div>';
+    return;
+  }
+
+  list.innerHTML = futuras.map(r => {
+    const dataBR = new Date(r.data + 'T12:00:00').toLocaleDateString('pt-PT', {weekday:'short',day:'numeric',month:'short'});
+    const espaco = r.espaco === 'sala' ? '🎉 Sala de Festas' : '⚽ Campo de Futebol';
+    return `
+      <div class="reserva-card">
+        <div class="reserva-info">
+          <div class="reserva-esp">${espaco}</div>
+          <div class="reserva-morada">${r.predio} — ${r.andar}</div>
+          <div class="reserva-data">${dataBR} • ${r.inicio}–${r.fim}</div>
+        </div>
+        <div class="reserva-actions">
+          <button class="btn-cancel-res" onclick="abrirCancelModal('${r.id}')">Cancelar</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function abrirCancelModal(id) {
+  cancelingId = id;
+  document.getElementById('cancelPin').value = '';
+  document.getElementById('cancelModalOverlay').classList.add('open');
+}
+
+async function confirmarCancelamento() {
+  const pin = document.getElementById('cancelPin').value.trim();
+  if (!pin || pin.length !== 4 || !/^\d+$/.test(pin)) {
+    showToast('Código inválido.','error');
+    return;
+  }
+
+  try {
+    const result = await apiDelete(cancelingId, pin);
+    if (result.success) {
+      await loadReservas();
+      showToast('Reserva cancelada com sucesso.','success');
+      closeCancelModal();
+      buscarMinhasReservas();
+    } else {
+      showToast(result.error || 'Erro ao cancelar.','error');
+    }
+  } catch(e) {
+    showToast('Erro de ligação.','error');
+  }
 }
 
 function showToast(msg, type) {
