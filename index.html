@@ -266,8 +266,14 @@
           <label>Prédio</label>
           <select id="sPredio">
             <option value="">— Seleccionar —</option>
-            <option value="florbela">Florbela Espanca</option>
-            <option value="guerra">Guerra Junqueiro</option>
+            <option value="14-gil-vicente">14 - Gil Vicente</option>
+            <option value="16-luis-camoes">16 - Luís de Camões</option>
+            <option value="18-almeida-garrett">18 - Almeida Garrett</option>
+            <option value="20-eca-queiroz">20 - Eça de Queiroz</option>
+            <option value="4-guerra-junqueiro">4 - Guerra Junqueiro</option>
+            <option value="6-florbela-espanca">6 - Florbela Espanca</option>
+            <option value="8-fernando-pessoa">8 - Fernando Pessoa</option>
+            <option value="10-miguel-torga">10 - Miguel Torga</option>
           </select>
         </div>
         <div class="search-field">
@@ -412,14 +418,23 @@
     <div class="modal-title" id="formTitle">Nova Reserva</div>
     <div class="modal-subtitle" id="formSubtitle"></div>
 
-    <div class="form-group">
+    <div class="form-group" id="periodGroup" style="display:none;">
+      <label>Período</label>
+      <select id="fPeriodo" onchange="atualizarHoras()">
+        <option value="">— Seleccionar —</option>
+        <option value="manha">Manhã (09:00–14:00)</option>
+        <option value="tarde">Tarde (15:00–20:00)</option>
+      </select>
+    </div>
+
+    <div class="form-group" id="horaGroup" style="display:none;">
       <label>Hora início</label>
       <select id="fInicio">
         <option value="">— Seleccionar —</option>
       </select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" id="fimGroup" style="display:none;">
       <label>Hora fim</label>
       <div id="fFim" style="padding:10px 12px;background:var(--cream);border-radius:8px;font-size:14px;color:var(--text);border:1px solid var(--border);">—</div>
     </div>
@@ -428,8 +443,14 @@
       <label>Prédio</label>
       <select id="fPredio">
         <option value="">— Seleccionar —</option>
-        <option value="florbela">Florbela Espanca</option>
-        <option value="guerra">Guerra Junqueiro</option>
+        <option value="14-gil-vicente">14 - Gil Vicente</option>
+        <option value="16-luis-camoes">16 - Luís de Camões</option>
+        <option value="18-almeida-garrett">18 - Almeida Garrett</option>
+        <option value="20-eca-queiroz">20 - Eça de Queiroz</option>
+        <option value="4-guerra-junqueiro">4 - Guerra Junqueiro</option>
+        <option value="6-florbela-espanca">6 - Florbela Espanca</option>
+        <option value="8-fernando-pessoa">8 - Fernando Pessoa</option>
+        <option value="10-miguel-torga">10 - Miguel Torga</option>
       </select>
     </div>
 
@@ -590,6 +611,34 @@ function getCampoSlots(dateStr) {
   return slots;
 }
 
+function atualizarHoras() {
+  const periodo = document.getElementById('fPeriodo').value;
+  const inicioSel = document.getElementById('fInicio');
+  const fimDiv = document.getElementById('fFim');
+  
+  inicioSel.innerHTML = '<option value="">— Seleccionar —</option>';
+  fimDiv.textContent = '—';
+  
+  if (!periodo) return;
+  
+  let inicio, fim;
+  if (periodo === 'manha') {
+    inicio = '09:00';
+    fim = '14:00';
+  } else if (periodo === 'tarde') {
+    inicio = '15:00';
+    fim = '20:00';
+  }
+  
+  const opt = document.createElement('option');
+  opt.value = inicio;
+  opt.textContent = inicio;
+  inicioSel.appendChild(opt);
+  
+  inicioSel.value = inicio;
+  fimDiv.textContent = fim;
+}
+
 function updateTimeOptions() {
   const inicioSel = document.getElementById('fInicio');
   const fimDiv = document.getElementById('fFim');
@@ -616,8 +665,9 @@ function updateTimeOptions() {
     inicioSel.appendChild(opt1);
   });
 
-  inicioSel.addEventListener('change', () => {
-    const chosenInicio = inicioSel.value;
+  // Remove old listener and add new one
+  inicioSel.onchange = function() {
+    const chosenInicio = this.value;
     if (!chosenInicio) {
       fimDiv.textContent = '—';
       return;
@@ -626,7 +676,7 @@ function updateTimeOptions() {
     if (matchedSlot) {
       fimDiv.textContent = matchedSlot.fim;
     }
-  });
+  };
 }
 
 // ─── API CALLS ────────────────────────────────────────────────────────────────
@@ -715,10 +765,22 @@ function abrirFormModal(dateStr) {
   selectedDay = dateStr;
   const dataBR = new Date(dateStr + 'T12:00:00').toLocaleDateString('pt-PT', {weekday:'long',day:'numeric',month:'long'});
   document.getElementById('formSubtitle').textContent = '📅 ' + dataBR;
-  updateTimeOptions();
+  
+  // Mostrar/esconder campos conforme espaço
+  if (selectedEspaco === 'sala') {
+    document.getElementById('periodGroup').style.display = 'block';
+    document.getElementById('horaGroup').style.display = 'block';
+    document.getElementById('fimGroup').style.display = 'block';
+  } else {
+    document.getElementById('periodGroup').style.display = 'none';
+    document.getElementById('horaGroup').style.display = 'block';
+    document.getElementById('fimGroup').style.display = 'block';
+    updateTimeOptions();
+  }
+  
   document.getElementById('formModal').classList.add('open');
   
-  ['fPredio','fAndar','fNome','fTelefone','fEmail','fDescricao','fInicio'].forEach(id => {
+  ['fPredio','fAndar','fNome','fTelefone','fEmail','fDescricao','fInicio','fPeriodo'].forEach(id => {
     if (document.getElementById(id)) document.getElementById(id).value = '';
   });
 }
