@@ -77,17 +77,19 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
   transform: translateX(-50%) translateY(-8px);
   background: var(--navy);
   color: white;
-  padding: 8px 12px;
+  padding: 12px 14px;
   border-radius: 8px;
   font-size: 12px;
-  white-space: nowrap;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-width: 200px;
   z-index: 10;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.2s;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
   font-weight: 400;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 .cal-day.com-reserva::before {
   content: '';
@@ -97,18 +99,22 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
   transform: translateX(-50%);
   width: 0;
   height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 5px solid var(--navy);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid var(--navy);
   opacity: 0;
   transition: opacity 0.2s;
   z-index: 10;
   pointer-events: none;
-  margin-top: -3px;
+  margin-top: -8px;
 }
 .cal-day.com-reserva:hover::after,
 .cal-day.com-reserva:hover::before {
   opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .cal-day.com-reserva::after { max-width: 160px; font-size: 11px; padding: 10px 12px; }
 }
 
 /* CONTENT PAGES - CARDS & STYLING */
@@ -334,7 +340,7 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
 <!-- HOME -->
 <div class="page active" id="page1">
   <div class="hero">
-    <h1>Reserva o teu espaço</h1>
+    <h1>Reserve o seu Espaço</h1>
     <p>Escolhe entre Sala de Festas ou Campo de Futebol</p>
 
     <div class="reg-notice">
@@ -876,7 +882,7 @@ function renderCal() {
         reservasHtml += `<div class="reserva-hora" style="color:var(--gold);font-weight:600;">+${dayRes.length - 2} mais</div>`;
       }
       
-      // Gerar tooltip com informações das reservas
+      // Gerar tooltip com informações de TODAS as reservas
       const PREDIOS_NOMES = {
         '14-gil-vicente':'Gil Vicente','16-luis-camoes':'Luís de Camões',
         '18-almeida-garrett':'Almeida Garrett','20-eca-queiroz':'Eça de Queiroz',
@@ -889,10 +895,13 @@ function renderCal() {
         '4-esq':'4º ESQ','4-drt':'4º DRT','5-esq':'5º ESQ','5-drt':'5º DRT'
       };
       
-      const primeiraRes = dayRes[0];
-      const predio = PREDIOS_NOMES[primeiraRes.predio] || primeiraRes.predio;
-      const andar = ANDARES_NOMES[primeiraRes.andar] || primeiraRes.andar;
-      tooltipText = `${primeiraRes.nome}\\A${primeiraRes.inicio}–${primeiraRes.fim}\\A${predio}, ${andar}${dayRes.length > 1 ? `\\A+ ${dayRes.length - 1} mais` : ''}`;
+      const tooltipLinhas = dayRes.map(r => {
+        const predio = PREDIOS_NOMES[r.predio] || r.predio;
+        const andar = ANDARES_NOMES[r.andar] || r.andar;
+        return `${r.nome}\n${r.inicio}–${r.fim}\n${predio}, ${andar}`;
+      }).join('\n\n');
+      
+      tooltipText = tooltipLinhas;
     }
 
     let cls = 'cal-day';
@@ -904,7 +913,7 @@ function renderCal() {
 
     const click = (!isOther && !isPast) ? `onclick="abrirModal('${dateStr}')"` : '';
     const numCls = isOther ? 'day-num outro' : 'day-num';
-    const tooltipAttr = tooltipText ? `data-tooltip="${tooltipText}"` : '';
+    const tooltipAttr = tooltipText ? `data-tooltip="${tooltipText.replace(/"/g, '&quot;')}"` : '';
 
     html += `<div class="${cls}" ${click} ${tooltipAttr}>
       <div class="${numCls}">${dayNum}</div>
