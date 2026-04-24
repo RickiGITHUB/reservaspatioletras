@@ -67,6 +67,50 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
 .reserva-badge { display: inline-block; font-size: 10px; padding: 2px 6px; background: var(--gold); color: white; border-radius: 8px; font-weight: 600; margin-top: 4px; }
 .reserva-hora { font-size: 10px; color: var(--navy); margin-top: 2px; font-weight: 500; }
 
+/* TOOLTIP */
+.cal-day { position: relative; }
+.cal-day.com-reserva::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: var(--navy);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  font-weight: 400;
+  line-height: 1.4;
+}
+.cal-day.com-reserva::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid var(--navy);
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 10;
+  pointer-events: none;
+  margin-top: -3px;
+}
+.cal-day.com-reserva:hover::after,
+.cal-day.com-reserva:hover::before {
+  opacity: 1;
+}
+
 /* CONTENT PAGES - CARDS & STYLING */
 .reg-hero { background: linear-gradient(135deg, var(--navy) 0%, #2a3050 100%); color: white; padding: 3rem 2rem; border-radius: 20px; margin-bottom: 2rem; text-align: center; position: relative; overflow: hidden; }
 .reg-hero::before { content: ''; position: absolute; top: -50%; right: -20%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(212,175,55,0.15) 0%, transparent 70%); }
@@ -824,12 +868,31 @@ function renderCal() {
     const dayRes = reservas.filter(r => r.espaco === selEspaco && r.data === dateStr);
     // Mostrar as reservas com hora (máximo 2 visíveis)
     let reservasHtml = '';
+    let tooltipText = '';
     if (dayRes.length > 0) {
       const visiveis = dayRes.slice(0, 2);
       reservasHtml = visiveis.map(r => `<div class="reserva-hora">● ${r.inicio}–${r.fim}</div>`).join('');
       if (dayRes.length > 2) {
         reservasHtml += `<div class="reserva-hora" style="color:var(--gold);font-weight:600;">+${dayRes.length - 2} mais</div>`;
       }
+      
+      // Gerar tooltip com informações das reservas
+      const PREDIOS_NOMES = {
+        '14-gil-vicente':'Gil Vicente','16-luis-camoes':'Luís de Camões',
+        '18-almeida-garrett':'Almeida Garrett','20-eca-queiroz':'Eça de Queiroz',
+        '4-guerra-junqueiro':'Guerra Junqueiro','6-florbela-espanca':'Florbela Espanca',
+        '8-fernando-pessoa':'Fernando Pessoa','10-miguel-torga':'Miguel Torga'
+      };
+      const ANDARES_NOMES = {
+        'rc-esq':'R/C ESQ','rc-drt':'R/C DRT','1-esq':'1º ESQ','1-drt':'1º DRT',
+        '2-esq':'2º ESQ','2-drt':'2º DRT','3-esq':'3º ESQ','3-drt':'3º DRT',
+        '4-esq':'4º ESQ','4-drt':'4º DRT','5-esq':'5º ESQ','5-drt':'5º DRT'
+      };
+      
+      const primeiraRes = dayRes[0];
+      const predio = PREDIOS_NOMES[primeiraRes.predio] || primeiraRes.predio;
+      const andar = ANDARES_NOMES[primeiraRes.andar] || primeiraRes.andar;
+      tooltipText = `${primeiraRes.nome}\\A${primeiraRes.inicio}–${primeiraRes.fim}\\A${predio}, ${andar}${dayRes.length > 1 ? `\\A+ ${dayRes.length - 1} mais` : ''}`;
     }
 
     let cls = 'cal-day';
@@ -841,8 +904,9 @@ function renderCal() {
 
     const click = (!isOther && !isPast) ? `onclick="abrirModal('${dateStr}')"` : '';
     const numCls = isOther ? 'day-num outro' : 'day-num';
+    const tooltipAttr = tooltipText ? `data-tooltip="${tooltipText}"` : '';
 
-    html += `<div class="${cls}" ${click}>
+    html += `<div class="${cls}" ${click} ${tooltipAttr}>
       <div class="${numCls}">${dayNum}</div>
       ${reservasHtml}
     </div>`;
