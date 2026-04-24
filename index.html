@@ -178,6 +178,77 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
   .hero h1 { font-size: 2rem; }
   .nav-item { padding: 6px 8px; font-size: 11px; }
 }
+
+/* HAMBURGER MENU (MOBILE) */
+.hamburger-btn { display: none; background: none; border: none; color: white; cursor: pointer; padding: 8px; }
+.hamburger-btn svg { width: 28px; height: 28px; }
+
+.mobile-menu { position: fixed; top: 0; right: -100%; width: 280px; height: 100vh; background: var(--navy); box-shadow: -4px 0 20px rgba(0,0,0,0.3); z-index: 200; transition: right 0.3s ease; display: flex; flex-direction: column; padding: 1.5rem 0; }
+.mobile-menu.open { right: 0; }
+.mobile-menu-header { padding: 0 1.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
+.mobile-menu-title { font-family: 'Great Vibes', cursive; color: var(--gold); font-size: 24px; }
+.mobile-menu-close { background: none; border: none; color: white; font-size: 28px; cursor: pointer; padding: 0; line-height: 1; }
+.mobile-menu-item { padding: 14px 1.5rem; color: rgba(255,255,255,0.8); font-size: 15px; cursor: pointer; border-left: 4px solid transparent; transition: all 0.2s; display: flex; align-items: center; gap: 12px; }
+.mobile-menu-item:hover { background: rgba(255,255,255,0.05); color: white; }
+.mobile-menu-item.active { background: rgba(212,175,55,0.1); color: var(--gold); border-left-color: var(--gold); }
+.mobile-menu-icon { font-size: 18px; width: 24px; text-align: center; }
+
+.menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 150; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.menu-overlay.open { opacity: 1; pointer-events: all; }
+
+@media (max-width: 768px) {
+  .nav-menu { display: none !important; }
+  .hamburger-btn { display: block; }
+  .logo-text { font-size: 22px; }
+  .logo-sub { font-size: 10px; }
+  header { padding: 0 1rem; }
+  #headerDate { display: none; }
+
+  /* Content pages */
+  .content-page { padding: 1rem; }
+  .reg-hero { padding: 2rem 1.5rem; margin-bottom: 1.5rem; }
+  .reg-hero h2 { font-size: 1.5rem; }
+  .reg-hero p { font-size: 13px; }
+  .reg-card { padding: 1.5rem 1.25rem; }
+  .reg-card-header { flex-direction: row; gap: 12px; padding-bottom: 1rem; margin-bottom: 1rem; }
+  .reg-card-icon { width: 44px; height: 44px; font-size: 22px; border-radius: 10px; }
+  .reg-card-title { font-size: 1.3rem; }
+  .reg-highlights { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .reg-highlight { padding: 10px; }
+  .reg-highlight-val { font-size: 16px; }
+  .reg-highlight-lbl { font-size: 10px; }
+  .reg-rules { font-size: 14px; }
+  .reg-rules ol > li { padding-left: 2.2rem; margin-bottom: 0.75rem; }
+  .reg-rules ol > li::before { width: 24px; height: 24px; font-size: 11px; }
+
+  /* FAQs */
+  .faq-section { padding: 1.5rem 1.25rem; }
+  .faq-section h3 { font-size: 1.2rem; }
+
+  /* Contactos */
+  .contact-card { padding: 2rem 1.25rem; }
+  .contact-icon { width: 64px; height: 64px; font-size: 28px; }
+  .contact-card h3 { font-size: 1.3rem; }
+
+  /* Minhas Reservas */
+  .content-page > div[style*="grid-template-columns:1fr 1fr auto"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Calendário */
+  .calendar-page { padding: 1rem; }
+  .cal-day { min-height: 60px; padding: 4px; }
+  .day-num { font-size: 12px; width: 20px; height: 20px; }
+  .reserva-hora { font-size: 9px; }
+  .cal-wd { font-size: 10px; padding: 8px 0; }
+  .page-title { font-size: 1.4rem; }
+
+  /* Modal */
+  .modal { padding: 1.5rem; max-width: 95%; }
+  .modal-title { font-size: 1.2rem; }
+  .periodo-grid { grid-template-columns: 1fr; }
+  .btn-periodo { padding: 12px; }
+}
 </style>
 </head>
 <body>
@@ -197,7 +268,24 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
     <div class="nav-item" id="nav6" onclick="goPage(6)">Contactos</div>
   </div>
   <div style="color:rgba(255,255,255,0.7);font-size:13px;" id="headerDate"></div>
+  <button class="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
 </header>
+
+<!-- MOBILE MENU -->
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMobileMenu()"></div>
+<nav class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-header">
+    <div class="mobile-menu-title">Pátio das Letras</div>
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Fechar">×</button>
+  </div>
+  <div class="mobile-menu-item active" id="mnav1" onclick="goPage(1);toggleMobileMenu()"><span class="mobile-menu-icon">🏠</span>Home</div>
+  <div class="mobile-menu-item" id="mnav3" onclick="goPage(3);toggleMobileMenu()"><span class="mobile-menu-icon">📋</span>Minhas Reservas</div>
+  <div class="mobile-menu-item" id="mnav4" onclick="goPage(4);toggleMobileMenu()"><span class="mobile-menu-icon">📖</span>Regulamento</div>
+  <div class="mobile-menu-item" id="mnav5" onclick="goPage(5);toggleMobileMenu()"><span class="mobile-menu-icon">💡</span>FAQs</div>
+  <div class="mobile-menu-item" id="mnav6" onclick="goPage(6);toggleMobileMenu()"><span class="mobile-menu-icon">📬</span>Contactos</div>
+</nav>
 
 <!-- HOME -->
 <div class="page active" id="page1">
@@ -659,13 +747,21 @@ const ANDARES_HTML = `
 document.getElementById('headerDate').textContent = new Date().toLocaleDateString('pt-PT',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 loadReservas();
 
+function toggleMobileMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+  document.getElementById('menuOverlay').classList.toggle('open');
+  document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+}
+
 // ── NAVEGAÇÃO ──────────────────────────────────────────────
 function goPage(n, espaco) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.nav-item, .mobile-menu-item').forEach(x => x.classList.remove('active'));
   document.getElementById('page'+n).classList.add('active');
   const nav = document.getElementById('nav'+n);
+  const mnav = document.getElementById('mnav'+n);
   if (nav) nav.classList.add('active');
+  if (mnav) mnav.classList.add('active');
 
   if (n === 2 && espaco) {
     selEspaco = espaco;
@@ -673,6 +769,9 @@ function goPage(n, espaco) {
     curDate = new Date();
     renderCal();
   }
+
+  // Scroll to top quando mudar de página
+  window.scrollTo(0, 0);
 }
 
 // ── CALENDÁRIO ─────────────────────────────────────────────
