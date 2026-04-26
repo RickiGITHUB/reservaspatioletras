@@ -165,6 +165,12 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
 .contact-email-box a { color: var(--navy); font-size: 18px; font-weight: 600; text-decoration: none; }
 .contact-email-lbl { font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 6px; }
 
+/* FILTERS GRID */
+.filters-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+@media (max-width: 600px) {
+  .filters-grid { grid-template-columns: 1fr 1fr; }
+}
+
 /* HOME REGULAMENTO NOTICE */
 .reg-notice { background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.4); backdrop-filter: blur(10px); border-radius: 14px; padding: 16px 24px; max-width: 700px; margin: 2rem auto 3rem; color: white; display: flex; align-items: center; gap: 14px; text-align: left; }
 .reg-notice-icon { font-size: 24px; flex-shrink: 0; }
@@ -312,8 +318,9 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
   </div>
   <div class="nav-menu">
     <div class="nav-item active" id="nav1" onclick="goPage(1)">Home</div>
-    <div class="nav-item" id="nav3" onclick="goPage(3)">Minhas Reservas</div>
-    <div class="nav-item" id="nav4" onclick="goPage(4)">Regulamento</div>
+    <div class="nav-item" id="nav3" onclick="goPage(3)">Pesquisar Reservas</div>
+    <div class="nav-item" id="nav4" onclick="goPage(4)">Reservas — Regulamento</div>
+    <div class="nav-item" id="nav7" onclick="goPage(7)">Regulamento Geral</div>
     <div class="nav-item" id="nav5" onclick="goPage(5)">FAQs</div>
     <div class="nav-item" id="nav6" onclick="goPage(6)">Contactos</div>
   </div>
@@ -331,8 +338,9 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
     <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Fechar">×</button>
   </div>
   <div class="mobile-menu-item active" id="mnav1" onclick="goPage(1);toggleMobileMenu()"><span class="mobile-menu-icon">🏠</span>Home</div>
-  <div class="mobile-menu-item" id="mnav3" onclick="goPage(3);toggleMobileMenu()"><span class="mobile-menu-icon">📋</span>Minhas Reservas</div>
-  <div class="mobile-menu-item" id="mnav4" onclick="goPage(4);toggleMobileMenu()"><span class="mobile-menu-icon">📖</span>Regulamento</div>
+  <div class="mobile-menu-item" id="mnav3" onclick="goPage(3);toggleMobileMenu()"><span class="mobile-menu-icon">🔍</span>Pesquisar Reservas</div>
+  <div class="mobile-menu-item" id="mnav4" onclick="goPage(4);toggleMobileMenu()"><span class="mobile-menu-icon">📖</span>Reservas — Regulamento</div>
+  <div class="mobile-menu-item" id="mnav7" onclick="goPage(7);toggleMobileMenu()"><span class="mobile-menu-icon">📜</span>Regulamento Geral</div>
   <div class="mobile-menu-item" id="mnav5" onclick="goPage(5);toggleMobileMenu()"><span class="mobile-menu-icon">💡</span>FAQs</div>
   <div class="mobile-menu-item" id="mnav6" onclick="goPage(6);toggleMobileMenu()"><span class="mobile-menu-icon">📬</span>Contactos</div>
 </nav>
@@ -341,7 +349,7 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
 <div class="page active" id="page1">
   <div class="hero">
     <h1>Reserve o seu Espaço</h1>
-    <p>Escolhe entre Sala de Festas ou Campo de Futebol</p>
+    <p>Escolhe entre Sala de Convívio/Festas ou Campo de Futebol</p>
 
     <div class="reg-notice">
       <div class="reg-notice-text">
@@ -393,15 +401,36 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
   </div>
 </div>
 
-<!-- MINHAS RESERVAS -->
+<!-- PESQUISAR RESERVAS -->
 <div class="page" id="page3">
-  <div class="content-page" style="max-width:800px;">
-    <div class="content-title">Minhas Reservas</div>
+  <div class="content-page" style="max-width:1000px;">
+    <div class="content-title">Pesquisar Reservas</div>
+    <p style="color:var(--muted);margin-bottom:1.5rem;">Use os filtros abaixo para procurar reservas. Pode combinar vários filtros.</p>
+
     <div style="background:white;border-radius:16px;border:1px solid var(--border);padding:2rem;margin-bottom:2rem;">
-      <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:1rem;align-items:flex-end;">
+      <div class="filters-grid">
+        <div class="form-group" style="margin:0;">
+          <label>Espaço</label>
+          <select id="fEspaco">
+            <option value="">Todos</option>
+            <option value="sala">🎉 Sala de Convívio/Festas</option>
+            <option value="campo">⚽ Campo de Futebol</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin:0;">
+          <label>Estado</label>
+          <select id="fEstado">
+            <option value="futuras">Futuras</option>
+            <option value="todas">Todas</option>
+            <option value="passadas">Passadas</option>
+          </select>
+        </div>
+
         <div class="form-group" style="margin:0;">
           <label>Prédio</label>
-          <select id="sPredio"><option value="">— Seleccionar —</option>
+          <select id="sPredio">
+            <option value="">Todos</option>
             <option value="14-gil-vicente">Gil Vicente</option>
             <option value="16-luis-camoes">Luís de Camões</option>
             <option value="18-almeida-garrett">Almeida Garrett</option>
@@ -412,9 +441,11 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
             <option value="10-miguel-torga">Miguel Torga</option>
           </select>
         </div>
+
         <div class="form-group" style="margin:0;">
           <label>Andar</label>
-          <select id="sAndar"><option value="">— Seleccionar —</option>
+          <select id="sAndar">
+            <option value="">Todos</option>
             <option value="rc-esq">R/C ESQ</option><option value="rc-drt">R/C DRT</option>
             <option value="1-esq">1º ESQ</option><option value="1-drt">1º DRT</option>
             <option value="2-esq">2º ESQ</option><option value="2-drt">2º DRT</option>
@@ -423,11 +454,28 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
             <option value="5-esq">5º ESQ</option><option value="5-drt">5º DRT</option>
           </select>
         </div>
-        <button style="padding:10px 20px;background:var(--navy);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:500;white-space:nowrap;" onclick="buscarReservas()">Buscar</button>
+
+        <div class="form-group" style="margin:0;">
+          <label>Data específica</label>
+          <input type="date" id="fData">
+        </div>
+
+        <div class="form-group" style="margin:0;">
+          <label>Nome</label>
+          <input type="text" id="fNomeFiltro" placeholder="Ex: João">
+        </div>
+      </div>
+
+      <div style="display:flex;gap:0.75rem;margin-top:1.5rem;flex-wrap:wrap;">
+        <button style="flex:1;min-width:140px;padding:12px 20px;background:var(--navy);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:500;" onclick="buscarReservas()">🔍 Pesquisar</button>
+        <button style="padding:12px 20px;background:white;color:var(--muted);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-weight:500;" onclick="limparFiltros()">Limpar Filtros</button>
       </div>
     </div>
+
+    <div id="resultadosCount" style="margin-bottom:1rem;font-size:13px;color:var(--muted);"></div>
+
     <div id="listaReservas" style="background:white;border-radius:16px;border:1px solid var(--border);padding:1.5rem;">
-      <div style="text-align:center;color:var(--muted);padding:2rem;"><div style="font-size:3rem;">🔍</div><p>Selecciona Prédio e Andar</p></div>
+      <div style="text-align:center;color:var(--muted);padding:2rem;"><div style="font-size:3rem;">🔍</div><p>Use os filtros e clique em "Pesquisar"</p></div>
     </div>
   </div>
 </div>
@@ -437,77 +485,18 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
   <div class="content-page">
 
     <div class="reg-hero">
-      <h2>📋 Regulamento</h2>
-      <p>Normas de utilização dos espaços comuns do Pátio das Letras</p>
+      <h2>📋 Reservas — Regulamento</h2>
+      <p>Normas de utilização da Sala de Convívio/Festas e do Campo de Futebol</p>
+      <p style="margin-top:0.5rem;font-size:12px;opacity:0.7;">Extraído do Regulamento Geral aprovado em Assembleia Geral a 14/12/2025</p>
     </div>
 
-    <!-- SALA DE FESTAS -->
-    <div class="reg-card">
-      <div class="reg-card-header">
-        <div class="reg-card-icon">🎉</div>
-        <div>
-          <div class="reg-card-title">Sala de Festas</div>
-          <div class="reg-card-sub">Normas de utilização</div>
-        </div>
-      </div>
-
-      <div class="reg-highlights">
-        <div class="reg-highlight">
-          <div class="reg-highlight-icon">👥</div>
-          <div class="reg-highlight-val">40</div>
-          <div class="reg-highlight-lbl">Pessoas máx.</div>
-        </div>
-        <div class="reg-highlight">
-          <div class="reg-highlight-icon">⏱️</div>
-          <div class="reg-highlight-val">5h</div>
-          <div class="reg-highlight-lbl">Duração máx.</div>
-        </div>
-        <div class="reg-highlight">
-          <div class="reg-highlight-icon">📅</div>
-          <div class="reg-highlight-val">60</div>
-          <div class="reg-highlight-lbl">Dias antec.</div>
-        </div>
-        <div class="reg-highlight">
-          <div class="reg-highlight-icon">🕘</div>
-          <div class="reg-highlight-val">2</div>
-          <div class="reg-highlight-lbl">Períodos/dia</div>
-        </div>
-      </div>
-
-      <div class="reg-rules">
-        <ol>
-          <li>É comummente aceite por todos os Associados que (…) seja feita a afetação e adaptação para um espaço de sala de festas.</li>
-          <li>A sala de festas é de uso exclusivo dos comproprietários no condomínio "Pátio das Letras", seus familiares e convidados.</li>
-          <li>A sala de festas poderá ser utilizada para festas de aniversário, reuniões do condomínio ou eventos da Associação.</li>
-          <li>Aquando da utilização para eventos organizados por dependentes menores de 18 anos de idade, será necessário que pelo menos um adulto se encontre presente no local.</li>
-          <li>Para a utilização da sala de festas, a reserva deverá ser efetuada com uma antecedência máxima de 60 dias, que será anotada no Livro de Reservas ou equivalente, disponibilizado pela direção da Associação.</li>
-          <li>Para efeitos de desempate, quando dois ou mais residentes optarem por reservar o local no mesmo dia e hora, terá preferência o morador que reservou com mais antecedência.</li>
-          <li>O comproprietário que utilizar a sala de festas, antes do evento deve verificar se a mesma se encontra limpa e arrumada e se os móveis e demais equipamentos se encontram em perfeito estado de utilização, comunicando, de imediato, à direção da associação qualquer anomalia detetada.</li>
-          <li>No final de cada evento a sala e a zona envolvente devem ficar limpas e com todo o mobiliário e equipamentos prontos para serem utilizados pelos próximos utilizadores.</li>
-          <li>O comproprietário é responsável pelos seus convidados e por todos os atos que estes venham a cometer dentro dos espaços comuns. A sua responsabilidade estende-se a qualquer dano provocado pelos mesmos, como também por qualquer incómodo que possam causar aos restantes residentes.</li>
-          <li>Será permitida a utilização de aparelhos de som e de televisão em volume que possa permitir uma conversação normal entre os presentes e não cause incómodo aos demais residentes.</li>
-          <li>O(s) associado(s) que promova(m) o evento, devem estar atentos à segurança do "Pátio das Letras" controlando quem entra e quem sai, devendo, ainda, evitar que crianças circulem pelos espaços comuns sem estarem devidamente acompanhadas.</li>
-          <li>Preferencialmente a entrada de convidados, deverá ser efetuada pelo portão localizado na Rua das Descobertas.</li>
-          <li>A utilização da sala de festas não pode limitar ou impedir a utilização do espaço envolvente, nomeadamente o parque infantil e corredor de circulação pelos outros comproprietários.</li>
-          <li>O horário das festas organizadas deverá respeitar a lei do ruído.</li>
-          <li>A festa é limitada a um máximo de <strong>40 pessoas</strong>, devendo-se respeitar:
-            <ul>
-              <li>Deverá ser feita a reserva preferencialmente por um período máximo de <strong>5 horas</strong>, optando pela manhã ou tarde;</li>
-              <li>A alimentação, bebidas e demais utensílios devem estar circunscritos ao espaço físico da sala e adjacente;</li>
-              <li>Caso haja disponibilidade, poderá reservar-se mais do que um período.</li>
-            </ul>
-          </li>
-        </ol>
-      </div>
-    </div>
-
-    <!-- CAMPO DE FUTEBOL -->
+    <!-- CAMPO DE FUTEBOL (Artigo 6º) -->
     <div class="reg-card campo">
       <div class="reg-card-header">
         <div class="reg-card-icon">⚽</div>
         <div>
           <div class="reg-card-title">Campo de Futebol</div>
-          <div class="reg-card-sub">Normas de utilização</div>
+          <div class="reg-card-sub">Artigo sexto — Normas de utilização</div>
         </div>
       </div>
 
@@ -540,29 +529,96 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
           <li>O acesso dos utentes ao campo de futebol encontra-se condicionado pelo respetivo horário de funcionamento e lotação máxima permitida.</li>
           <li>Os utilizadores do campo de futebol devem cumprir as seguintes normas de conduta:
             <ul>
-              <li>Usar de respeito, correção e urbanidade nas relações com os outros utilizadores;</li>
-              <li>Não consumir alimentos e bebidas no espaço desportivo, exceto água e bebidas isotónicas;</li>
-              <li>Não utilizar objetos estranhos e inadequados à prática desportiva que possam deteriorar as instalações ou os materiais/equipamentos existentes;</li>
-              <li>Não danificar as instalações desportivas incluindo a sua vedação e portão de acesso, nem escrever, colar papéis ou riscar as paredes;</li>
-              <li>Utilizar calçado adequado à prática desportiva em relva sintética, de sola rasa ou de pitons específicos para este tipo de piso;</li>
-              <li>Não andar de bicicleta, de trotinete ou de patins no espaço desportivo.</li>
+              <li><strong>a)</strong> Usar de respeito, correção e urbanidade nas relações com os outros utilizadores;</li>
+              <li><strong>b)</strong> Não consumir alimentos e bebidas no espaço desportivo, exceto água e bebidas isotónicas;</li>
+              <li><strong>c)</strong> Não utilizar objetos estranhos e inadequados à prática desportiva que possam deteriorar as instalações ou os materiais/equipamentos existentes;</li>
+              <li><strong>d)</strong> Não danificar as instalações desportivas incluindo a sua vedação e portão de acesso, nem escrever, colar papeis ou riscar as paredes;</li>
+              <li><strong>e)</strong> Utilizar calçado adequado à prática desportiva em relva sintética, de sola rasa ou de pitons específicos para este tipo de piso;</li>
+              <li><strong>f)</strong> Não andar de bicicleta, de trotinete ou de patins no espaço desportivo.</li>
             </ul>
           </li>
           <li>A lotação máxima do campo de jogos é de <strong>12 (doze) pessoas</strong>.</li>
           <li>Os comproprietários/residentes podem convidar familiares ou amigos para a prática desportiva no campo de futebol observando as seguintes regras:
             <ul>
-              <li>Os convidados devem estar em permanência acompanhados pelo comproprietário/residente, responsabilizando-se este por qualquer dano que os convidados possam provocar;</li>
-              <li>Os convidados devem cumprir todas as normas constantes no regulamento.</li>
+              <li><strong>a)</strong> Os convidados devem estar em permanência acompanhados pelo comproprietário/residente, responsabilizando-se este por qualquer dano que os convidados possam provocar;</li>
+              <li><strong>b)</strong> Os convidados devem cumprir todas as normas constantes no regulamento.</li>
             </ul>
           </li>
           <li>Independentemente do número de convidados, a lotação máxima do campo não pode exceder o limite previsto no ponto 4 deste artigo.</li>
-          <li>Caso ocorra algum dano no espaço desportivo, vedação, portão de acesso e nos materiais existentes (balizas e redes), devem os utilizadores responsabilizarem-se pelos mesmos e informar na primeira oportunidade, a direção da Associação de comproprietários do Pátio das Letras.</li>
+          <li>Caso ocorra algum dano no espaço desportivo, vedação, portão de acesso e nos materiais existentes (balizas e redes), devem os utilizadores responsabilizarem-se pelos mesmos e informar, na primeira oportunidade, a direção da Associação de comproprietários do Pátio das Letras.</li>
           <li>Não é permitida a realização de festas no recinto do campo de futebol, salvo se houver eventos e autorização prévia da direção da associação por escrito.</li>
-          <li>O horário de utilização do campo de futebol é das <strong>09h00 às 21h00</strong>.</li>
+          <li>O horário de utilização do campo de futebol é das <strong>09H00 às 21H00</strong>.</li>
           <li>Excecionalmente os associados/residentes podem reservar junto da associação com o mínimo de <strong>24 horas de antecedência</strong>, e por tempo limitado (período máximo de <strong>1 (uma) hora</strong>) com um máximo de <strong>2 períodos/dia</strong> de reserva, responsabilizando-se pelo comportamento e danos que possam ocorrer.</li>
           <li>No caso previsto no ponto anterior, a piscina, a área adjacente e o ginásio estão interditos aos convidados.</li>
         </ol>
       </div>
+    </div>
+
+    <!-- SALA DE CONVÍVIO/FESTAS (Artigo 7º) -->
+    <div class="reg-card">
+      <div class="reg-card-header">
+        <div class="reg-card-icon">🎉</div>
+        <div>
+          <div class="reg-card-title">Sala de Convívio/Festas</div>
+          <div class="reg-card-sub">Artigo sétimo — Normas de utilização</div>
+        </div>
+      </div>
+
+      <div class="reg-highlights">
+        <div class="reg-highlight">
+          <div class="reg-highlight-icon">👥</div>
+          <div class="reg-highlight-val">40</div>
+          <div class="reg-highlight-lbl">Pessoas máx.</div>
+        </div>
+        <div class="reg-highlight">
+          <div class="reg-highlight-icon">⏱️</div>
+          <div class="reg-highlight-val">5h</div>
+          <div class="reg-highlight-lbl">Duração máx.</div>
+        </div>
+        <div class="reg-highlight">
+          <div class="reg-highlight-icon">📅</div>
+          <div class="reg-highlight-val">60</div>
+          <div class="reg-highlight-lbl">Dias antec.</div>
+        </div>
+        <div class="reg-highlight">
+          <div class="reg-highlight-icon">🕘</div>
+          <div class="reg-highlight-val">2</div>
+          <div class="reg-highlight-lbl">Períodos/dia</div>
+        </div>
+      </div>
+
+      <div class="reg-rules">
+        <ol>
+          <li>É comummente aceite por todos os Associados que, ao espaço aberto autónomo de apoio à área comum do Lote 31L com a área de 33,50 m², sito no lote G, seja feita a afetação e adaptação para um espaço de sala de convívio/festas.</li>
+          <li>A sala de convívio/festas é de uso exclusivo dos comproprietários/residentes no condomínio "Pátio das Letras", seus familiares e convidados.</li>
+          <li>A sala de convívio/festas poderá ser utilizada para festas de aniversário, reuniões do condomínio ou eventos da Associação.</li>
+          <li>Aquando da utilização para eventos organizados por dependentes menores de 18 anos de idade, será necessário que pelo menos um adulto se encontre presente no local.</li>
+          <li>Para a utilização da sala de convívio/festas, a reserva deverá ser efetuada com uma antecedência máxima de <strong>60 (sessenta) dias</strong>, que será anotada no Livro de Reservas ou equivalente, disponibilizado pela direção da Associação do Pátio das Letras.</li>
+          <li>Para efeitos de desempate, quando dois ou mais residentes optarem por reservar o local no mesmo dia e hora, terá preferência o morador que reservou com mais antecedência.</li>
+          <li>O comproprietário/residente que utilizar a sala de convívio/festas, antes do evento deve verificar se a mesma se encontra limpa e arrumada e se os móveis e demais equipamentos se encontram em perfeito estado de utilização, comunicando, de imediato, à direção da associação qualquer anomalia detetada.</li>
+          <li>No final de cada evento/utilização a sala e a zona envolvente devem ficar limpas e com todo o mobiliário e equipamentos prontos para serem utilizados pelos próximos utilizadores.</li>
+          <li>O comproprietário/residente é responsável pelos seus convidados e por todos os atos que estes venham a cometer dentro dos espaços comuns. A sua responsabilidade estende-se a qualquer dano provocado pelos mesmos, como também por qualquer incomodo que possam causar aos restantes residentes.</li>
+          <li>Será permitida a utilização de aparelhos de som e de televisão em volume que possa permitir uma conversação normal entre os presentes e não cause incómodo aos demais residentes.</li>
+          <li>O(s) associado(s)/residentes que promova(m) o evento, devem estar atentos à segurança do "Pátio das Letras" controlando quem entra e quem sai, devendo, ainda, evitar que crianças circulem pelos espaços comuns sem estarem devidamente acompanhadas.</li>
+          <li>Preferencialmente a entrada de convidados, deverá ser efetuada pelo portão localizado na Rua das Descobertas.</li>
+          <li>A utilização da sala de convívio/festas não pode limitar ou impedir a utilização do espaço envolvente, nomeadamente o parque infantil e corredor de circulação pelos outros comproprietários/residentes.</li>
+          <li>O horário das festas organizadas deverá respeitar a lei do ruído.</li>
+          <li>A festa/convívio é limitada a um máximo de <strong>40 pessoas</strong>, devendo-se respeitar:
+            <ul>
+              <li><strong>a)</strong> Deverá ser feita a reserva preferencialmente por um período máximo de <strong>5 horas</strong>, optando pela manhã ou tarde;</li>
+              <li><strong>b)</strong> A alimentação, bebidas e demais utensílios devem estar circunscritos ao espaço físico da sala e adjacente;</li>
+              <li><strong>c)</strong> Caso haja disponibilidade, poderá reservar-se mais do que um período.</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <div style="background:var(--gold-light);border-radius:12px;padding:1.25rem;text-align:center;margin-top:1rem;">
+      <p style="margin:0;font-size:13px;color:var(--text);">
+        💡 Para consultar o regulamento completo do condomínio, visita a página
+        <span style="color:var(--gold);font-weight:600;cursor:pointer;text-decoration:underline;" onclick="goPage(7)">Regulamento Geral</span>.
+      </p>
     </div>
 
   </div>
@@ -582,12 +638,12 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
 
       <div class="faq-item">
         <div class="faq-q">Como faço uma reserva?</div>
-        <div class="faq-a">Clica em "Home", escolhe o espaço (Sala de Festas ou Campo de Futebol), selecciona o dia no calendário e preenche o formulário com os teus dados.</div>
+        <div class="faq-a">Clica em "Home", escolhe o espaço (Sala de Convívio/Festas ou Campo de Futebol), selecciona o dia no calendário e preenche o formulário com os teus dados.</div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q">Com quanta antecedência posso reservar?</div>
-        <div class="faq-a"><strong>Sala de Festas:</strong> até 60 dias de antecedência (máximo).<br>
+        <div class="faq-a"><strong>Sala de Convívio/Festas:</strong> até 60 dias de antecedência (máximo).<br>
         <strong>Campo de Futebol:</strong> no mínimo 24 horas de antecedência.</div>
       </div>
 
@@ -598,7 +654,7 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
 
       <div class="faq-item">
         <div class="faq-q">Posso reservar mais do que um período no mesmo dia?</div>
-        <div class="faq-a"><strong>Sala de Festas:</strong> Sim, caso haja disponibilidade.<br>
+        <div class="faq-a"><strong>Sala de Convívio/Festas:</strong> Sim, caso haja disponibilidade.<br>
         <strong>Campo de Futebol:</strong> Sim, até um máximo de 2 períodos por dia.</div>
       </div>
     </div>
@@ -608,7 +664,7 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
 
       <div class="faq-item">
         <div class="faq-q">Como cancelo a minha reserva?</div>
-        <div class="faq-a">Vai a "Minhas Reservas", selecciona o teu Prédio e Andar, clica em "Cancelar" e introduz o código de cancelamento (PIN) que recebeste por email.</div>
+        <div class="faq-a">Vai a "Pesquisar Reservas", filtra por <strong>Prédio</strong> e <strong>Andar</strong>, clica em "Cancelar" na tua reserva e introduz o código de cancelamento (PIN) que recebeste por email.</div>
       </div>
 
       <div class="faq-item">
@@ -618,7 +674,7 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
     </div>
 
     <div class="faq-section">
-      <h3>🎉 Sala de Festas</h3>
+      <h3>🎉 Sala de Convívio/Festas</h3>
 
       <div class="faq-item">
         <div class="faq-q">Quantas pessoas podem estar na sala?</div>
@@ -709,6 +765,205 @@ header { background: var(--navy); padding: 0 2rem; display: flex; align-items: c
         <div class="contact-email-lbl">📧 Email</div>
         <a href="mailto:acpatioletras@gmail.com">acpatioletras@gmail.com</a>
       </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- REGULAMENTO GERAL (page 7) -->
+<div class="page" id="page7">
+  <div class="content-page">
+
+    <div class="reg-hero">
+      <h2>📜 Regulamento Geral</h2>
+      <p>Normas de utilização dos espaços comuns do Pátio das Letras</p>
+      <p style="margin-top:0.5rem;font-size:12px;opacity:0.7;">Aprovado em Assembleia Geral a 14 de dezembro de 2025</p>
+    </div>
+
+    <!-- CAPÍTULO I -->
+    <div class="reg-card" style="border-left-color:#1a1f3a;">
+      <div class="reg-card-header">
+        <div class="reg-card-icon" style="background:#e8e8f0;">📚</div>
+        <div>
+          <div class="reg-card-title">Capítulo I — Aplicabilidade e Objeto</div>
+          <div class="reg-card-sub">Artigos 1º e 2º</div>
+        </div>
+      </div>
+
+      <div class="reg-rules">
+        <p style="font-weight:600;color:var(--navy);margin-bottom:0.5rem;">Artigo primeiro — Aplicabilidade</p>
+        <p style="margin-bottom:1.5rem;line-height:1.7;">O presente regulamento aplica-se à gestão do espaço correspondente ao prédio urbano a que corresponde o Lote 31-L, com a área comum de 5.580,88 m² e os espaços autónomos, não encerrados de apoio à área comum do lote 31-L, com as áreas de 33,50 m² sito no lote G e 77 m² sito no lote F do Pátio das Letras, sitos na Urbanização Parque Luso, Alto do Moinho, freguesia de Corroios, município do Seixal, descrito na Conservatória do Registo Predial de Amora, sob o número seis mil quatrocentos e noventa e três, da referida freguesia, inscrito na matriz predial urbana sob o artigo 13335, com o valor patrimonial tributário de 33.282,91 €, tendo sido doada à Associação por escritura pública de 16 de Setembro de dois mil e vinte e cinco. Livro 260-A Fls 81 como área de lazer para os Associados.</p>
+
+        <p style="font-weight:600;color:var(--navy);margin-bottom:0.5rem;">Artigo segundo — Objeto</p>
+        <ol>
+          <li>No presente regulamento são definidas:
+            <ul>
+              <li><strong>a)</strong> As regras de funcionamento, de acesso e de utilização dos espaços comuns geridos pela associação;</li>
+              <li><strong>b)</strong> O procedimento e as sanções a aplicar aos associados que infrinjam as regras estabelecidas.</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- CAPÍTULO II -->
+    <div class="reg-card" style="border-left-color:#1a1f3a;">
+      <div class="reg-card-header">
+        <div class="reg-card-icon" style="background:#e8e8f0;">📋</div>
+        <div>
+          <div class="reg-card-title">Capítulo II — Normas de Funcionamento</div>
+          <div class="reg-card-sub">Artigos 3º a 9º</div>
+        </div>
+      </div>
+
+      <div class="reg-rules">
+        <!-- Artigo 3º -->
+        <p style="font-weight:600;color:var(--navy);margin-bottom:0.5rem;">Artigo terceiro — Normas gerais</p>
+        <ol>
+          <li>Os associados têm obrigação de conhecer, cumprir e fazer cumprir o regulamento da Associação, as decisões administrativas da Associação e, ainda, as deliberadas em assembleias gerais, ordinárias ou extraordinárias.</li>
+          <li>Os associados têm a liberdade de utilizar a sua fração, assim como de utilizar, juntamente com todos os outros associados, usufruir com tranquilidade, conforto e segurança, as partes comuns (áreas e equipamentos existentes).</li>
+          <li>É expressamente proibido arrendar, ceder ou explorar, no todo ou em parte, o terreno e estruturas para fins que não sejam estritamente do usufruto dos associados nos termos do presente regulamento, bem como nele manter, materiais, objetos, aparelhos e instalações suscetíveis de afetar de qualquer forma a saúde, segurança e a tranquilidade dos demais comproprietários/residentes, observando-se sempre as disposições legais.</li>
+          <li>Não é permitido o usufruto dos espaços comuns por utilizadores de alojamento local.</li>
+          <li>Não é permitida a utilização de material pirotécnico nos espaços comuns, salvo se houver autorização prévia da Direção da Associação.</li>
+          <li>Não é permitido fumar (cigarros, charutos, tabaco aquecido e quaisquer outros de natureza semelhante) nos espaços comuns geridos pela Associação, a não ser em zonas restritas devidamente assinaladas, aprovadas pelo conselho de administradores devidamente mandatado.</li>
+          <li>Não é permitido deixar resíduos/lixo nos espaços comuns geridos pela Associação.</li>
+          <li>Não é permitida a permanência ou circulação de animais nos espaços comuns geridos pela Associação.</li>
+          <li>Não é permitido entrar ou permanecer nos espaços comuns geridos pela Associação se for portador de doença infectocontagiosa ou se estiver sobre o efeito de bebidas alcoólicas ou de estupefacientes.</li>
+          <li>Não é permitida a utilização de equipamentos de som, salvo se houver autorização prévia da direção da associação por escrito.</li>
+        </ol>
+
+        <!-- Artigo 4º -->
+        <p style="font-weight:600;color:var(--navy);margin-bottom:0.5rem;margin-top:2rem;">Artigo quarto — Normas de utilização do jardim, espaços verdes, lagos e instalações sanitárias</p>
+        <ol>
+          <li>Nos espaços verdes do jardim e espaços de circulação é proibido:
+            <ul>
+              <li><strong>a)</strong> Destruir ou danificar as árvores, arbustos e herbáceas existentes, nomeadamente cortar ou golpear os seus troncos e raízes, bem como riscar ou inscrever gravações;</li>
+              <li><strong>b)</strong> Destruir ou danificar, por qualquer forma, os resguardos, apoios e suportes das árvores e arbustos;</li>
+              <li><strong>c)</strong> Afixar, pregar, agrafar ou pendurar objetos ou dísticos em ramos, troncos ou folhas, bem como fixar fios, escoras ou cordas, quaisquer que sejam as suas finalidades, sem autorização expressa da Associação;</li>
+              <li><strong>d)</strong> Lançar pedras, paus ou outros objetos passíveis de prejudicarem o lago, cascatas de ligação dos lagos, as árvores e demais vegetação;</li>
+              <li><strong>e)</strong> Destruir, danificar ou alterar qualquer estrutura, equipamento ou mobiliário, nomeadamente instalações, construções, vedações, grades, canteiros e portões;</li>
+              <li><strong>f)</strong> Destruir, danificar ou alterar ou fazer uso indevido de peças constituintes do sistema de rega, nomeadamente, aspersores, pulverizadores, microjatos, gotejadores, bocas de rega, válvulas, torneiras, filtros e programadores;</li>
+              <li><strong>g)</strong> Destruir, danificar ou alterar os sistemas de iluminação;</li>
+              <li><strong>h)</strong> Abrir as caixas dos sistemas implantados, nomeadamente das válvulas do sistema de rega, nos sistemas de acionamento, quer sejam manuais ou automáticos, nos contadores de água e eletricidade;</li>
+              <li><strong>i)</strong> Retirar água dos lagos e canais de ligação ou utilizar para banhos ou danificar a flora e fauna neles existentes, bem como arremessar ou lançar para dentro dos mesmos objetos líquidos ou sólidos de qualquer natureza;</li>
+              <li><strong>j)</strong> Realizar de festas nos espaços do jardim, exceto se organizadas pela Associação;</li>
+              <li><strong>k)</strong> Instalar grelhadores ou outros equipamentos para a confeção de alimentos, com exceção dos eventos organizados pela Associação.</li>
+            </ul>
+          </li>
+          <li>Os utilizadores serão responsáveis por qualquer acidente sofrido aquando da utilização e permanência no jardim, lagos, cascatas, e pontes, reconhecendo que o local não dispõe de vigilância permanente.</li>
+        </ol>
+
+        <!-- Artigo 5º -->
+        <p style="font-weight:600;color:var(--navy);margin-bottom:0.5rem;margin-top:2rem;">Artigo quinto — Normas de utilização da piscina</p>
+        <ol>
+          <li>O acesso à piscina é reservado aos associados/residentes das frações, sendo livre para estes e para as pessoas que com eles residem, não podendo ser apostas restrições de qualquer tipo, salvo aquelas que decorram do seu período de uso, manutenção ou que decorram do presente documento.</li>
+          <li>É vedado o acesso a não residentes exceto quando acompanhados por associados/residentes das frações.</li>
+          <li>Cada associados/residentes podem convidar até <strong>4 pessoas</strong> (incluindo adultos e crianças), sem prejuízo da lotação máxima.</li>
+          <li>Por questões de higiene, a utilização da piscina pressupõe o uso de roupa adequada/apropriada para o efeito e a passagem prévia pelo chuveiro.</li>
+          <li>Por questões de segurança, é proibido mergulhar ou correr em todo o recinto da piscina.</li>
+          <li>Os utilizadores são responsáveis por qualquer acidente sofrido aquando da utilização e permanência na piscina, reconhecendo que o local não dispõe de vigilância permanente.</li>
+          <li>É proibida a permanência de crianças menores de 12 anos de idade que não estejam acompanhadas por um adulto. A associação não se responsabiliza por qualquer acidente que possa ocorrer.</li>
+          <li>O horário de utilização da piscina é das <strong>07H00 às 22H00</strong>, condicionado ao referido no ponto 1.</li>
+          <li>Não são permitidos na piscina e zona envolvente quaisquer jogos desportivos ou atividades lúdicas, incluindo o uso de aparelhos sonoros, a utilização de bolas, colchões e pranchas, salvo eventos organizados pela Associação.</li>
+          <li>O mobiliário de utilização coletiva, como espreguiçadeiras, chapéus de sol, mesas e cadeiras, é para utilização de todos os associados/residentes, sendo da responsabilidade destes zelar pelo seu bom uso e garantir a sua boa condição de utilização.</li>
+          <li>Quaisquer danos ao mobiliário referido no ponto anterior, que sejam devidos ao uso indevido ou imprudente, serão da inteira responsabilidade dos associados/residentes utilizador, pelo que o arranjo ou substituição do mobiliário danificado ficará a seu cargo.</li>
+          <li>Após utilização, o mobiliário de apoio à piscina (espreguiçadeiras, mesas, cadeiras e chapéus-de-sol) deve ser devidamente arrumado.</li>
+          <li>O utilizador dos equipamentos após a sua utilização, deverá garantir que os mesmos ficam arrumados e/ou fechados.</li>
+          <li>Não é permitida a marcação de lugares.</li>
+          <li>Não é permitida a utilização de material cerâmico ou de vidro.</li>
+          <li>Não é permitido comer nos espaços da piscina.</li>
+          <li>Não é permitida a realização de festas nos espaços da piscina, salvo eventos organizados pela associação.</li>
+          <li>É obrigatório prender cabelos longos antes de tomar banho na piscina.</li>
+        </ol>
+
+        <!-- Artigo 6º (referência) -->
+        <p style="font-weight:600;color:var(--navy);margin-bottom:0.5rem;margin-top:2rem;">Artigo sexto — Normas de utilização do campo de futebol</p>
+        <p style="background:var(--gold-light);padding:1rem;border-radius:8px;border-left:3px solid var(--gold);margin-bottom:1rem;">
+          ⚽ Para consultar as normas detalhadas do Campo de Futebol, visita a página
+          <span style="color:var(--gold);font-weight:600;cursor:pointer;text-decoration:underline;" onclick="goPage(4)">Reservas — Regulamento</span>.
+        </p>
+
+        <!-- Artigo 7º (referência) -->
+        <p style="font-weight:600;color:var(--navy);margin-bottom:0.5rem;margin-top:2rem;">Artigo sétimo — Normas de utilização da sala de convívio/festas</p>
+        <p style="background:var(--gold-light);padding:1rem;border-radius:8px;border-left:3px solid var(--gold);margin-bottom:1rem;">
+          🎉 Para consultar as normas detalhadas da Sala de Convívio/Festas, visita a página
+          <span style="color:var(--gold);font-weight:600;cursor:pointer;text-decoration:underline;" onclick="goPage(4)">Reservas — Regulamento</span>.
+        </p>
+
+        <!-- Artigo 8º -->
+        <p style="font-weight:600;color:var(--navy);margin-bottom:0.5rem;margin-top:2rem;">Artigo oitavo — Normas de utilização do ginásio</p>
+        <ol>
+          <li>É comummente aceite por todos os Associados que, ao espaço aberto autónomo de apoio à área comum do Lote 31L com a área de 77,00 m² sito no lote F, seja feita a afetação e adaptação para um espaço de ginásio.</li>
+          <li>Cada comproprietário/residente deve, previamente à sua primeira utilização, procurar obter informações sobre o uso adequado dos equipamentos disponíveis.</li>
+          <li>A utilização do ginásio é reservada aos associados/residentes, sendo permitida a presença de um convidado acompanhado pelo mesmo, desde que não se ultrapasse o número de <strong>8 pessoas</strong> a frequentar ao mesmo tempo.</li>
+          <li>O horário de funcionamento do ginásio é das <strong>08H00 às 21H00</strong> nos dias de semana, no fim de semana e feriados é das <strong>09H00 às 21H00</strong>.</li>
+          <li>Os utilizadores do ginásio devem ter especial atenção no manuseamento de pesos, de modo a não fazer barulho que possa incomodar os residentes, com especial incidência no período das 08H00 às 09H00 e das 20H00 às 21H00, sendo obrigatório o fecho da porta existente no meio do ginásio.</li>
+          <li>É obrigatória a utilização de roupa e calçado apropriados e de uso exclusivo, bem como de uma toalha de treino aquando da utilização dos equipamentos.</li>
+          <li>A idade mínima para a utilização dos equipamentos do ginásio é de <strong>16 anos</strong> de idade, podendo desde que acompanhado por um adulto baixar para os 12 anos.</li>
+          <li>Os associados/residentes e/ou convidados são responsáveis por quaisquer danos causados à sua integridade física e aos equipamentos existentes.</li>
+          <li>O comproprietário/residente é responsável pelo ressarcimento de qualquer dano causado aos equipamentos existentes no ginásio, por utilização abusiva, má conduta ou má utilização.</li>
+          <li>A arrumação do equipamento é da responsabilidade de cada utilizador.</li>
+          <li>Os utilizadores do ginásio devem desligar a iluminação, o ar condicionado e os restantes equipamentos que funcionem a energia elétrica.</li>
+          <li>É proibido comer e beber no ginásio, com a exceção para o consumo de água e de bebidas isotónicas.</li>
+          <li>Não é permitida a utilização de aparelhos sonoros, com exceção para a utilização de fones.</li>
+          <li>A sala pequena do ginásio deverá ser utilizada apenas para atividades sem ruido e a porta deverá estar sempre fechada quando houver atividade no ginásio.</li>
+        </ol>
+
+        <!-- Artigo 9º -->
+        <p style="font-weight:600;color:var(--navy);margin-bottom:0.5rem;margin-top:2rem;">Artigo nono — Normas de utilização do parque infantil</p>
+        <ol>
+          <li>Só é permitida a utilização do parque infantil por crianças até aos <strong>12 (doze) anos</strong> de idade.</li>
+          <li>É interdito aos utilizadores do parque infantil danificar, por qualquer forma, os equipamentos de recreio instalados, lançar objetos, detritos ou qualquer outro material.</li>
+          <li>Tendo em consideração a qualidade do piso do parque infantil e como forma de preservar o mesmo, é proibida comer ou beber neste espaço.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- CAPÍTULO III -->
+    <div class="reg-card" style="border-left-color:#DC2626;">
+      <div class="reg-card-header">
+        <div class="reg-card-icon" style="background:#fef2f2;">⚖️</div>
+        <div>
+          <div class="reg-card-title">Capítulo III — Disposições Disciplinares</div>
+          <div class="reg-card-sub">Artigos 10º e 11º</div>
+        </div>
+      </div>
+
+      <div class="reg-rules">
+        <!-- Artigo 10º -->
+        <p style="font-weight:600;color:var(--navy);margin-bottom:0.5rem;">Artigo décimo — Procedimento</p>
+        <ol>
+          <li>O procedimento disciplinar segue, em primeiro lugar, o estabelecido no artigo 27.º dos Estatutos da Associação.</li>
+          <li>A infração das normas constantes no presente regulamento será analisada pela Direção da Associação, podendo esta nomear, para efeitos do procedimento disciplinar, um instrutor.</li>
+          <li>Para efeitos de designação do instrutor deve ter-se em consideração as seguintes regras:
+            <ul>
+              <li><strong>a)</strong> A escolha não pode recair sobre quem detiver a sua fração no prédio onde o infrator/responsável pela violação/dano seja residente;</li>
+              <li><strong>b)</strong> Não pode ser nomeado o associado/residente que tenha afinidade familiar com o responsável pela infração e/ou dano.</li>
+            </ul>
+          </li>
+          <li>Se o incumprimento das normas e/ou o dano for efetuado por um convidado ou menor, a responsabilidade recai sobre o responsável pela visita ou pelo responsável legal do menor.</li>
+        </ol>
+
+        <!-- Artigo 11º -->
+        <p style="font-weight:600;color:var(--navy);margin-bottom:0.5rem;margin-top:2rem;">Artigo décimo primeiro — Sanções e foro para a resolução de litígios/conflitos</p>
+        <ol>
+          <li>As penalidades para o infrator podem assumir a forma de advertência, verbal ou por escrito, de sanção pecuniária ou de suspensão de uso dos espaços comuns de lazer, podendo estas últimas ser cumulativas.</li>
+          <li>No caso de aplicação de sanção pecuniária, o valor mínimo corresponderá ao montante de <strong>150 €</strong>.</li>
+          <li>Em caso de reincidência o valor mínimo da sanção pecuniária corresponderá ao montante do dobro do valor indicado no ponto 2.</li>
+          <li>As sanções fixadas são, excluindo a advertência verbal, comunicadas por meio de carta registada com aviso de receção ou por meio de correio eletrónico com recibo de leitura.</li>
+          <li>Para a resolução de qualquer litígio/conflito, incluindo a contestação das sanções aplicadas por infração às regras estabelecidas no presente regulamento, será competente o Julgado de Paz do Seixal ou o Tribunal Judicial e de Família e Menores da Comarca do Seixal, com renúncia expressa a qualquer outro.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- NOTA FINAL -->
+    <div style="background:var(--gold-light);border-radius:12px;padding:1.5rem;text-align:center;margin-top:1rem;border:1px solid var(--gold);">
+      <p style="margin:0;font-size:13px;color:var(--text);line-height:1.6;">
+        ✅ <strong>O presente regulamento foi aprovado na assembleia geral da associação de comproprietários realizada aos 14 dias do mês de dezembro do ano de 2025</strong>, entrando em vigor a partir desta data devendo-se cumprir as regras inscritas no mesmo.
+      </p>
+      <p style="margin:0.75rem 0 0;font-size:12px;color:var(--muted);font-style:italic;">
+        Poderá sofrer alterações futuras, desde que aprovadas pela maioria dos presentes em assembleia.
+      </p>
     </div>
 
   </div>
@@ -815,7 +1070,7 @@ function goPage(n, espaco) {
 
   if (n === 2 && espaco) {
     selEspaco = espaco;
-    document.getElementById('pageTitle').textContent = espaco === 'sala' ? 'Sala de Festas' : 'Campo de Futebol';
+    document.getElementById('pageTitle').textContent = espaco === 'sala' ? 'Sala de Convívio/Festas' : 'Campo de Futebol';
     curDate = new Date();
     renderCal();
   }
@@ -1121,28 +1376,88 @@ function fecharPin() {
 }
 
 // ── MINHAS RESERVAS ────────────────────────────────────────
+function limparFiltros() {
+  document.getElementById('fEspaco').value = '';
+  document.getElementById('fEstado').value = 'futuras';
+  document.getElementById('sPredio').value = '';
+  document.getElementById('sAndar').value = '';
+  document.getElementById('fData').value = '';
+  document.getElementById('fNomeFiltro').value = '';
+  document.getElementById('listaReservas').innerHTML = '<div style="text-align:center;color:var(--muted);padding:2rem;"><div style="font-size:3rem;">🔍</div><p>Use os filtros e clique em "Pesquisar"</p></div>';
+  document.getElementById('resultadosCount').textContent = '';
+}
+
 function buscarReservas() {
+  const espaco = document.getElementById('fEspaco').value;
+  const estado = document.getElementById('fEstado').value;
   const predio = document.getElementById('sPredio').value;
   const andar  = document.getElementById('sAndar').value;
-  if (!predio||!andar) { showToast('Selecciona Prédio e Andar.','error'); return; }
+  const data   = document.getElementById('fData').value;
+  const nome   = document.getElementById('fNomeFiltro').value.trim().toLowerCase();
+
   const hoje = new Date().toISOString().split('T')[0];
-  const lista = reservas.filter(r => r.predio===predio && r.andar===andar && r.data>=hoje)
-    .sort((a,b) => (a.data+a.inicio).localeCompare(b.data+b.inicio));
+
+  const PREDIOS_NOMES = {
+    '14-gil-vicente':'Gil Vicente','16-luis-camoes':'Luís de Camões',
+    '18-almeida-garrett':'Almeida Garrett','20-eca-queiroz':'Eça de Queiroz',
+    '4-guerra-junqueiro':'Guerra Junqueiro','6-florbela-espanca':'Florbela Espanca',
+    '8-fernando-pessoa':'Fernando Pessoa','10-miguel-torga':'Miguel Torga'
+  };
+  const ANDARES_NOMES = {
+    'rc-esq':'R/C ESQ','rc-drt':'R/C DRT','1-esq':'1º ESQ','1-drt':'1º DRT',
+    '2-esq':'2º ESQ','2-drt':'2º DRT','3-esq':'3º ESQ','3-drt':'3º DRT',
+    '4-esq':'4º ESQ','4-drt':'4º DRT','5-esq':'5º ESQ','5-drt':'5º DRT'
+  };
+
+  let lista = [...reservas];
+
+  // Filtros
+  if (espaco) lista = lista.filter(r => r.espaco === espaco);
+  if (predio) lista = lista.filter(r => r.predio === predio);
+  if (andar)  lista = lista.filter(r => r.andar === andar);
+  if (data)   lista = lista.filter(r => r.data === data);
+  if (nome)   lista = lista.filter(r => r.nome.toLowerCase().includes(nome));
+
+  // Estado (só aplica se não tiver data específica)
+  if (!data) {
+    if (estado === 'futuras') lista = lista.filter(r => r.data >= hoje);
+    else if (estado === 'passadas') lista = lista.filter(r => r.data < hoje);
+  }
+
+  // Ordenar por data (asc para futuras, desc para passadas)
+  lista.sort((a,b) => {
+    if (estado === 'passadas') return (b.data+b.inicio).localeCompare(a.data+a.inicio);
+    return (a.data+a.inicio).localeCompare(b.data+b.inicio);
+  });
+
   const el = document.getElementById('listaReservas');
+  const count = document.getElementById('resultadosCount');
+
   if (!lista.length) {
-    el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:2rem;"><div style="font-size:3rem;">📭</div><p>Nenhuma reserva encontrada</p></div>';
+    el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:2rem;"><div style="font-size:3rem;">📭</div><p>Nenhuma reserva encontrada com estes filtros</p></div>';
+    count.textContent = '0 resultados';
     return;
   }
+
+  count.textContent = `${lista.length} ${lista.length === 1 ? 'resultado' : 'resultados'}`;
+
   el.innerHTML = lista.map(r => {
-    const d = new Date(r.data+'T12:00:00').toLocaleDateString('pt-PT');
-    const esp = r.espaco==='sala' ? '🎉 Sala' : '⚽ Campo';
-    return `<div style="padding:1rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-      <div>
-        <div style="font-size:11px;color:var(--gold);font-weight:600;">${esp}</div>
-        <div style="font-weight:500;">${r.predio} — ${r.andar}</div>
-        <div style="font-size:12px;color:var(--muted);">${d} • ${r.inicio}–${r.fim}</div>
+    const d = new Date(r.data+'T12:00:00').toLocaleDateString('pt-PT', {weekday:'short', day:'numeric', month:'short'});
+    const esp = r.espaco==='sala' ? '🎉 Sala de Convívio/Festas' : '⚽ Campo de Futebol';
+    const espColor = r.espaco==='sala' ? '#E8762B' : '#00A896';
+    const predioNome = PREDIOS_NOMES[r.predio] || r.predio;
+    const andarNome = ANDARES_NOMES[r.andar] || r.andar;
+    const isPassada = r.data < hoje;
+
+    return `<div style="padding:1rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;${isPassada?'opacity:0.6;':''}">
+      <div style="flex:1;min-width:200px;">
+        <div style="font-size:11px;color:${espColor};font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">${esp}</div>
+        <div style="font-weight:600;color:var(--navy);">${r.nome}</div>
+        <div style="font-size:13px;color:var(--text);margin-top:2px;">${predioNome} — ${andarNome}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">📅 ${d} • 🕐 ${r.inicio}–${r.fim}</div>
+        ${r.descricao ? `<div style="font-size:12px;color:var(--muted);margin-top:2px;font-style:italic;">"${r.descricao}"</div>` : ''}
       </div>
-      <button onclick="cancelar('${r.id}')" style="background:var(--red);color:white;border:none;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:12px;">Cancelar</button>
+      ${!isPassada ? `<button onclick="cancelar('${r.id}')" style="background:var(--red);color:white;border:none;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:12px;white-space:nowrap;">Cancelar</button>` : '<span style="font-size:11px;color:var(--muted);font-style:italic;">Passada</span>'}
     </div>`;
   }).join('');
 }
@@ -1156,7 +1471,7 @@ function cancelar(id) {
   reservaParaCancelar = reserva;
 
   const dataBR = new Date(reserva.data+'T12:00:00').toLocaleDateString('pt-PT',{weekday:'long',day:'numeric',month:'long'});
-  const espacoNome = reserva.espaco === 'sala' ? '🎉 Sala de Festas' : '⚽ Campo de Futebol';
+  const espacoNome = reserva.espaco === 'sala' ? '🎉 Sala de Convívio/Festas' : '⚽ Campo de Futebol';
 
   const PREDIOS_NOMES = {
     '14-gil-vicente':'Gil Vicente','16-luis-camoes':'Luís de Camões',
